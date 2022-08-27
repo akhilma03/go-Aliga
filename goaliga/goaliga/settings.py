@@ -42,6 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accountz',
     'rest_framework',
+    'trips',
+    'vendorz',
+     'drf_yasg',
+     'corsheaders'
+    
 ]
 
 MIDDLEWARE = [
@@ -52,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'goaliga.urls'
@@ -135,3 +141,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 TWILIO_VERIFY_SERVICE_SID=config('TWILIO_VERIFY_SERVICE_SID')
 TWILIO_ACCOUNT_SID=config('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN=config('TWILIO_AUTH_TOKEN')
+
+
+#SMTP
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'aligadrm@gmail.com'
+EMAIL_HOST_PASSWORD = 'jhpzxatzbzhbyfzr'
+EMAIL_USE_TLS = True
+
+CORS_ORIGIN_ALLOW_ALL =True
+CORS_ALLOW_CREDENTIALS = True
+
