@@ -21,6 +21,9 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.mail import send_mail
+from django.contrib.auth import authenticate
+
+
 
 
 from vendorz import serializers
@@ -73,11 +76,17 @@ class LoginView(APIView):
         print(password,'passwordddd')
         vendor = Registrationz.objects.filter(email=email).first()
         print(vendor.email,'get emaillllll')
+        passwords =vendor.password
+        print(passwords,"hoioioioi")
+
         if vendor is None:
             raise exceptions.AuthenticationFailed ('No Vendor available')
 
-        if  check_password(password, vendor.password):
-            
+        if  not check_password(password, passwords) :
+            raise exceptions.AuthenticationFailed ('Password Inncorect')
+
+        # vendor = authenticate(email=email, password=password)      
+        if vendor.is_staff:
             access_token = create_access_token(vendor.id)
             refresh_token = create_refresh_token(vendor.id)
             print("hellooo")
@@ -97,7 +106,7 @@ class LoginView(APIView):
 
             return  response   
         else:
-             raise exceptions.AuthenticationFailed ('validation error')
+            raise exceptions.AuthenticationFailed ('You are not a Vendor')
 
 
 

@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Registrationz(models.Model):
-    Process =(('Registration_Approved','Registration_Approved'),('Under_Process ','Under_Process' ,),('Approved','Approved',))
+    Process =(('Applied','Applied'),('Under_Process ','Under_Process' ,),('Rejected','Rejected',),('Approved','Approved',))
     company_name = models.CharField(max_length=500)
     company_logo = models.ImageField(upload_to = 'photos/vendor')
     owner_name = models.CharField(max_length=500)
@@ -16,7 +16,7 @@ class Registrationz(models.Model):
     licence_image = models.ImageField(upload_to = 'photos/vendor')
     year_of_experience =  models.CharField(max_length=100)
     password =  models.CharField(max_length=100)
-    appProcess =  models.CharField(max_length=100, choices=Process,null=True,default='Registration Approved')
+    appProcess =  models.CharField(max_length=100, choices=Process,null=True,default='Applied')
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)

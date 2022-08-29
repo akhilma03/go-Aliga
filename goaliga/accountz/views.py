@@ -11,10 +11,13 @@ from rest_framework.authentication import get_authorization_header
 from rest_framework.views import APIView
 from django.contrib.auth.hashers import make_password
 from accountz.models import Account,UserToken
-from .serializers import AccountSerilaizer, VerifySerilazer
+from .serializers import AccountSerilaizer, VendorSerilaizers, VerifySerilazer
 from rest_framework.decorators import api_view, permission_classes
 from .authentication import *
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import authenticate
+from vendorz.models import *
+from vendorz.serializers import *
 
 
 #email
@@ -116,27 +119,28 @@ class LoginView(APIView):
 
         if not user.check_password(password):
             raise exceptions.AuthenticationFailed('Invalid Credientials')
-        # if user.is_active == 'True':    
+        user = authenticate(email=email, password=password)  
+        if user: 
+    
+            access_token = create_access_token(user.id)
+            refresh_token = create_refresh_token(user.id)
 
-        access_token = create_access_token(user.id)
-        refresh_token = create_refresh_token(user.id)
+            UserToken.objects.create(
+                user_id = user.id,
+                token= refresh_token,
+                expired_at =  datetime.datetime.utcnow()+datetime.timedelta(days=7),
+            )
 
-        UserToken.objects.create(
-            user_id = user.id,
-            token= refresh_token,
-            expired_at =  datetime.datetime.utcnow()+datetime.timedelta(days=7),
-        )
+            response = Response()
+            response.set_cookie(key='refresh_token',
+                                value=refresh_token, httponly=True)
+            response.data = {
+                'token': access_token
+            }
 
-        response = Response()
-        response.set_cookie(key='refresh_token',
-                            value=refresh_token, httponly=True)
-        response.data = {
-            'token': access_token
-        }
-
-        return response
-        # else:
-        #     raise exceptions.AuthenticationFailed ('Invalid User')
+            return response
+        else:
+            raise exceptions.AuthenticationFailed ('Invalid User')
 
 
 
@@ -241,14 +245,26 @@ def resetpassword(request):
             return Response(message,status=status.HTTP_400_BAD_REQUEST)    
 
 
-class ViewallUser(generics.ListAPIView):
+class ViewallUser(generics.RetrieveUpdateAPIView):
     # authentication_classes = [AdminJwt]
     queryset = Account.objects.all()
     serializer_class = AccountSerilaizer
 
+@api_view(['POST'])
+def StatusApplication(request,pk):
+    application =  Registrationz.objects.get(id=pk)
+
+    if request.method == 'POST':
+        serilaizer = VendorSerilaizers(instance=application,data=request.data)
 
 
+        if serilaizer.is_valid():
+            serilaizer.save()
+
+    return Response(serilaizer.data)    
 
 
-
+class StatusApplication(generics.RetrieveUpdateAPIView):
+    queryset = Registrationz.objects.all()
+    serializer_class = VendorSerilaizers
     
