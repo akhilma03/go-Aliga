@@ -1,17 +1,22 @@
 
+from dataclasses import field
+from pyexpat import model
 from rest_framework import serializers
 from .models import Registrationz
 from trips . models import Packages
 from trips.models import Packages,Itinerary,Category
 
 class VendorSerilaizer(serializers.ModelSerializer):
+
+    confirm_password = serializers.CharField
+
     class Meta:
         model = Registrationz
-        fields = ['company_name','company_logo','owner_name','adhar_no','aadhar_image','office_address','mobile','email','registration_doc','licence_no','licence_image','year_of_experience','password','confirm_password']
-    
+        # fields = ['company_name','company_logo','owner_name','adhar_no','aadhar_image','office_address','mobile','email','registration_doc','licence_no','licence_image','year_of_experience','password','confirm_password']
+        fields = '__all__'
         extra_kwargs = {
             'password':{'write_only':True},
-            'confirm_password':{'write_only':True}
+            # 'confirm_password':{'write_only':True}
         }
 
 class PackageSerilaizerz(serializers.ModelSerializer):
@@ -28,3 +33,6 @@ class CategorySerilaizer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__' 
+
+
+         

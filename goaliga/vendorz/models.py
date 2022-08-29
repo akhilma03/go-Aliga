@@ -16,7 +16,6 @@ class Registrationz(models.Model):
     licence_image = models.ImageField(upload_to = 'photos/vendor')
     year_of_experience =  models.CharField(max_length=100)
     password =  models.CharField(max_length=100)
-    confirm_password = models.CharField(max_length=100)
     appProcess =  models.CharField(max_length=100, choices=Process,null=True,default='Registration Approved')
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now_add=True)
@@ -27,3 +26,9 @@ class Registrationz(models.Model):
 
     def __str__(self):
         return self.company_name
+
+class VendorToken(models.Model):
+    vendor_id = models.IntegerField()
+    token = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expired_at = models.DateTimeField()

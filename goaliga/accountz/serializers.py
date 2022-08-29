@@ -7,8 +7,8 @@ import re
 
 def isNamevalid(first_name):
     if(re.match("^(?=.{1,40}$)[a-zA-Z]+(?:[-'\s][a-zA-Z]+)*$",first_name)==None):
-            print(first_name)
-            raise serializers.ValidationError("Invalid Name ")
+        print(first_name)
+        raise serializers.ValidationError("Invalid Name ")
     return first_name 
 
 
@@ -29,3 +29,4 @@ class VerifySerilazer(serializers.ModelSerializer):
         model=Account
         fields = ['is_active']
    
+ 

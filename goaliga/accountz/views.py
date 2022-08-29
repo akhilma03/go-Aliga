@@ -116,6 +116,7 @@ class LoginView(APIView):
 
         if not user.check_password(password):
             raise exceptions.AuthenticationFailed('Invalid Credientials')
+        # if user.is_active == 'True':    
 
         access_token = create_access_token(user.id)
         refresh_token = create_refresh_token(user.id)
@@ -134,6 +135,9 @@ class LoginView(APIView):
         }
 
         return response
+        # else:
+        #     raise exceptions.AuthenticationFailed ('Invalid User')
+
 
 
 class UserApiView(APIView):
@@ -149,7 +153,7 @@ class RefreshAPIView(APIView):
         id = decode_refresh_token(refresh_token)
 
         if not UserToken.objects.filter(user_id = id,
-        token = refresh_token,expired_at__gt=datetime.datetime.now(tz=datetime.timezone.utc)).exists():
+        token = refresh_token,expired_at__gt=datetime.da390000tetime.now(tz=datetime.timezone.utc)).exists():
              raise exceptions.AuthenticationFailed('unautherozied') 
        
         access_token = create_access_token(id)
@@ -172,7 +176,9 @@ class LogoutAPIView(APIView):
 class ForgotAPI(APIView):
     def post(self,request):
         data = request.data
+        
         email = data['email']
+        
         if Account .objects.filter(email=email).exists():
             user = Account.objects.get(email__exact=email)
 
@@ -236,13 +242,13 @@ def resetpassword(request):
 
 
 class ViewallUser(generics.ListAPIView):
-    authentication_classes = [AdminJwt]
+    # authentication_classes = [AdminJwt]
     queryset = Account.objects.all()
     serializer_class = AccountSerilaizer
 
 
 
-def inactive(request):
-    user = Account.objects.get(is_active=False)
 
-    return  user
+
+
+    

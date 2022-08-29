@@ -16,6 +16,7 @@ from rest_framework import status
 class ViewPackages(generics.ListAPIView):
     queryset = Packages.objects.filter(is_approve=True)
     serializer_class = PackageSerilaizer
+    
 
 @api_view(['GET'])
 def trips(request,category_slug):
@@ -48,4 +49,8 @@ def tripdetails(request,category_slug,package_slug):
         return Response(message,status=status.HTTP_400_BAD_REQUEST) 
 
 
-
+@api_view(['GET'])
+def viewCat(request):
+    categories = Category.objects.all()
+    serializer = CategorySerilaizerz(categories,many=True)
+    return Response(serializer.data)
