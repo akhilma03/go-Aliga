@@ -18,6 +18,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from vendorz.models import *
 from vendorz.serializers import *
+from rest_framework.decorators import authentication_classes
 
 
 #email
@@ -109,6 +110,7 @@ class LoginView(APIView):
 
 
     def post(self, request):
+        print(request.data)
         email = request.data['email']
         password = request.data['password']
 
@@ -264,7 +266,41 @@ def StatusApplication(request,pk):
     return Response(serilaizer.data)    
 
 
-class StatusApplication(generics.RetrieveUpdateAPIView):
+class statusApplication(generics.RetrieveUpdateAPIView):
     queryset = Registrationz.objects.all()
     serializer_class = VendorSerilaizers
+
+class ViewRegs(generics.ListAPIView):
+    authentication_classes = [AdminJwt]
+    queryset = Registrationz.objects.all()
+    serializer_class = VendorSerilaizer
+
+
+class ViewdetailRegs(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = [AdminJwt]
+    queryset = Registrationz.objects.all()
+    serializer_class = VendorSerilaizers        
     
+
+@api_view(['PUT'])  
+def BlockVendor(request,id):
+    try:
+        user=Registrationz.objects.get(id=id)
+        value=VendorSerilaizers(instance=user, data=request.data)
+        if value.is_valid():
+            value.save()
+      
+        return Response(value.data)
+
+    except:
+        print('error found')
+        message={'detail':'changing error in blocking '}
+        return Response(message,status=status.HTTP_400_BAD_REQUEST)  
+
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def UserProfile(request):
+    user=request.user
+    serializer=AccountSerilaizer(user,many=False)
+    return Response(serializer.data)
+

@@ -94,7 +94,7 @@ DATABASES = {
         'PASSWORD': 'cartbia',
         'HOST': 'localhost',
         'PORT': '5432',
-    }
+    } 
 }
 
 

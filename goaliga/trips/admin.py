@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category,Itinerary,Packages
+from .models import Category,Itinerary,Packages,DateBooking
 # Register your models here.
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -13,3 +13,4 @@ class PackageAdmin(admin.ModelAdmin):
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(Itinerary)
 admin.site.register(Packages,PackageAdmin)
+admin.site.register(DateBooking)

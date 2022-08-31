@@ -12,8 +12,6 @@ router.register('itenery',PackageViewset,basename='package')
 urlpatterns = [
     
     path('accounts/',views.RegisterVendor,name='register'),
-    path('viewreg/',ViewRegs.as_view(),name='viewreg'),
-    path('viewregs/<int:pk>/',ViewdetailRegs.as_view(),name='viewreg'),
     path('vlogin/',LoginView.as_view(),name='register'),
     path('vlogout/',LogoutView.as_view(),name='register'),
 

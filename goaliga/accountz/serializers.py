@@ -30,9 +30,8 @@ class VerifySerilazer(serializers.ModelSerializer):
    
  
 class VendorSerilaizers(serializers.ModelSerializer):
-
-    confirm_password = serializers.CharField
-
+    # company_name =serializers.SerializerMethodField(read_only=True)
+    # owner_name  =serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Registrationz
         # fields = ['company_name','company_logo','owner_name','adhar_no','aadhar_image','office_address','mobile','email','registration_doc','licence_no','licence_image','year_of_experience','password','confirm_password']

@@ -22,6 +22,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate
+from accountz.authentication import *
 
 
 
@@ -134,10 +135,7 @@ class LoginView(APIView):
 #          return Response(serializer.data) 
 
 
-class ViewRegs(generics.ListAPIView):
-    authentication_classes = [StaffAuthentication]
-    queryset = Registrationz.objects.all()
-    serializer_class = VendorSerilaizer
+
     
 class LogoutView(APIView):
     def post(self,request):
@@ -148,10 +146,6 @@ class LogoutView(APIView):
         }    
         return response
 
-class ViewdetailRegs(generics.RetrieveUpdateDestroyAPIView):
-    authentication_classes = [StaffAuthentication]
-    queryset = Registrationz.objects.all()
-    serializer_class = VendorSerilaizer
 
 
     
@@ -162,12 +156,12 @@ class PackageViewset(viewsets.ModelViewSet):
    
 
 class CategoryViewset(viewsets.ModelViewSet):
-    authentication_classes = [StaffAuthentication]
+    # authentication_classes = [StaffAuthentication]
     queryset = Category.objects.all()
     serializer_class = CategorySerilaizer
 
 
 class ItineraryViewset(viewsets.ModelViewSet):
-    authentication_classes = [StaffAuthentication]
+    # authentication_classes = [StaffAuthentication]
     queryset = Itinerary.objects.all()
     serializer_class = ItinerarySerilaizer

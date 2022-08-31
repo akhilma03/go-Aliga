@@ -10,7 +10,7 @@ class Registrationz(models.Model):
     aadhar_image=  models.ImageField(upload_to = 'photos/vendor')
     office_address = models.TextField(max_length=1000)
     mobile = models.CharField(max_length=500)
-    email =models.CharField(max_length=500)
+    email =models.EmailField(max_length=500,unique=True)
     registration_doc= models.ImageField(upload_to = 'photos/vendor')
     licence_no = models.CharField(max_length=500)
     licence_image = models.ImageField(upload_to = 'photos/vendor')
@@ -19,7 +19,6 @@ class Registrationz(models.Model):
     appProcess =  models.CharField(max_length=100, choices=Process,null=True,default='Applied')
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now_add=True)
-    is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     
