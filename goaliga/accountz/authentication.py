@@ -47,11 +47,9 @@ class JWTAuthentication(BaseAuthentication):
               if auth and len(auth) == 2:
                     token = auth[1].decode('utf-8')
                     id =decode_access_token(token)
+                    print(id,"sdds")
                     user = Account.objects.get(pk=id)
-                  #   user = Account.objects.filter(is_admin=True)
                     return (user,None)
-
-                    
               raise exceptions.AuthenticationFailed('unauthenticated')
 
 

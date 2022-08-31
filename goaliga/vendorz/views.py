@@ -45,6 +45,7 @@ def RegisterVendor(request):
         company_name= data['company_name'],
         company_logo=data['company_logo'],
         adhar_no=data['adhar_no'],
+         owner_name=data['owner_name'],
         aadhar_image=data['aadhar_image'],
         office_address=data['office_address'],
         mobile=data['mobile'],
@@ -150,18 +151,18 @@ class LogoutView(APIView):
 
     
 class PackageViewset(viewsets.ModelViewSet):
-    # authentication_classes = [JWTAuthentication]
-    queryset = Packages.objects.all()
+    authentication_classes = [StaffAuthentication]
+    queryset = Packages.objects.all()   
     serializer_class = PackageSerilaizerz
    
 
 class CategoryViewset(viewsets.ModelViewSet):
-    # authentication_classes = [StaffAuthentication]
+    authentication_classes = [StaffAuthentication]
     queryset = Category.objects.all()
     serializer_class = CategorySerilaizer
 
 
 class ItineraryViewset(viewsets.ModelViewSet):
-    # authentication_classes = [StaffAuthentication]
+    authentication_classes = [StaffAuthentication]
     queryset = Itinerary.objects.all()
     serializer_class = ItinerarySerilaizer

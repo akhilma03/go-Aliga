@@ -9,15 +9,15 @@ from rest_framework import status, exceptions,generics
 def create_access_token(id):
     return jwt.encode({
           #payload
-          'vendor_id':id ,
-          'exp': datetime.datetime.utcnow() +datetime.timedelta(seconds=30),
+          'user_id':id ,
+          'exp': datetime.datetime.utcnow() +datetime.timedelta(minutes=5),
           'iat':datetime.datetime.utcnow()
     },'access_secret',algorithm='HS256')
 
 def create_refresh_token(id):
     return jwt.encode({
           #payload
-          'vendor_id':id ,
+          'user_id':id ,
           'exp': datetime.datetime.utcnow()+datetime.timedelta(days=7),
           'iat':datetime.datetime.utcnow()
     },'refresh_secret',algorithm='HS256')
@@ -27,29 +27,35 @@ def create_refresh_token(id):
 def decode_access_token (token):
       try:
         payload = jwt.decode(token,'access_secret',algorithms='HS256')
-        return payload ['vendor_id']
+        print(payload,"jjj")
+        return payload ['user_id']
       except Exception as e: 
-        print (e)
+        print (e,"jijiji")
+        print("hellooooooo")
         raise exceptions.AuthenticationFailed('unauthenticated')
 
 def decode_refresh_token (token):
       try:
         payload = jwt.decode(token,'refresh_secret',algorithms='HS256')
-        return payload ['vendor_id']
+        return payload ['user_id']
       except : 
         raise exceptions.AuthenticationFailed('unauthenticated')
+
+
 # MIDDLEWARE
 class StaffAuthentication(BaseAuthentication):
         def authenticate(self, request):
 
               auth = get_authorization_header(request).split()
+              print(auth,"dsfdsfdsfds")
 
               if auth and len(auth) == 2:
                     token = auth[1].decode('utf-8')
+                    print(token,"fghdf")
                     id =decode_access_token(token)
+                    print(id)
                     vendor = Registrationz.objects.get(pk=id)
-
-                  #   user = Account.objects.filter(is_admin=True)
+                    print("akhjdshj")
                     if vendor.is_staff:
                         return (vendor,None)
 

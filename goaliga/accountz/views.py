@@ -137,7 +137,9 @@ class LoginView(APIView):
             response.set_cookie(key='refresh_token',
                                 value=refresh_token, httponly=True)
             response.data = {
-                'token': access_token
+                'token': access_token,
+                'refresh':refresh_token,
+                'first_name':user.first_name
             }
 
             return response

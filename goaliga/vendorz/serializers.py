@@ -1,10 +1,16 @@
 
 from dataclasses import field
 from pyexpat import model
+from wsgiref.validate import validator
 from rest_framework import serializers
 from .models import Registrationz
 from trips . models import Packages
 from trips.models import Packages,Itinerary,Category
+
+
+def vendordergValid(data):
+    print(data)
+    print("iam validator")
 
 class VendorSerilaizer(serializers.ModelSerializer):
 
@@ -18,6 +24,7 @@ class VendorSerilaizer(serializers.ModelSerializer):
             'password':{'write_only':True},
             # 'confirm_password':{'write_only':True}
         }
+        validators=[vendordergValid]
 
 class PackageSerilaizerz(serializers.ModelSerializer):
     class Meta:
