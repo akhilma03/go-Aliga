@@ -1,3 +1,4 @@
+from tkinter import CASCADE
 from django.db import models
 
 # Create your models here.
@@ -45,16 +46,28 @@ class Itinerary(models.Model):
     itinerary_name = models.CharField(max_length=100)
     days = models.CharField(max_length=165)
     description = models.TextField(max_length=500)
-
+   
     def __str__(self):
         return self.itinerary_name
 
 
 class DateBooking(models.Model):
     package=models.ForeignKey(Packages,on_delete=models.CASCADE,null=True,blank=True)   
-    Date=models.CharField(max_length=50)
+    Date=models.DateTimeField(auto_now_add=True)
     days=models.CharField(max_length=30)
     active=models.BooleanField(default=False)
 
     def __str__(self):
         return self.days
+
+variation_choice =(('No_of_peoples','No_of_peoples'),('No_Days','No Days'))
+class Variations(models.Model):
+    package = models.ForeignKey(Packages,on_delete=models.CASCADE)
+    variation_category =models.CharField(max_length=100,choices=variation_choice)
+    variation_value = models.IntegerField() 
+    is_active = models.BooleanField(default=True)
+     
+
+
+    def __str__(self):
+        return self.variation_category  

@@ -10,6 +10,8 @@ from django .shortcuts import get_list_or_404
 from .serializers import *
 from rest_framework.response import Response
 from rest_framework import status 
+import datetime
+
 # Create your views here.
 
 
@@ -54,3 +56,31 @@ def viewCat(request):
     categories = Category.objects.all()
     serializer = CategorySerilaizerz(categories,many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def Bookuser(request,pk):
+    now = datetime.datetime.now()
+    package = Packages.objects.get(id=pk)
+    slot = DateBooking.objects.filter(package=package,Date__gte=now)
+    serializer = SlotSerilaizer(slot,many=True)
+    return Response(serializer.data)
+
+
+    
+@api_view(['POST'])
+def addPackage(request):
+    data = request.data
+    No_of_peoples = data['No_of_peoples']
+    No_Days =data['No_Days']
+
+    print(No_Days,No_of_peoples)
+    try:
+        variation = Variations.objects.get(variation_category__iexact=No_of_peoples,variation_value__iexact =No_Days )
+        print(variation)
+    except:
+        pass  
+
+    return Response("returned")
+
+

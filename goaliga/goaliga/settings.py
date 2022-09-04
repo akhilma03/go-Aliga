@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     'trips',
     'vendorz',
      'drf_yasg',
-     'corsheaders'
+     'corsheaders',
+     'payment'
+
     
 ]
 
@@ -153,3 +155,7 @@ EMAIL_USE_TLS = True
 CORS_ORIGIN_ALLOW_ALL =True
 CORS_ALLOW_CREDENTIALS = True
 
+#razorpay
+
+RAZORPAY_PUBLIC_KEY =config('RAZORPAY_PUBLIC_KEY')
+RAZORPAY__SECRET_KEY = config('RAZORPAY__SECRET_KEY')

@@ -14,5 +14,6 @@ urlpatterns = [
     path('accounts/',views.RegisterVendor,name='register'),
     path('vlogin/',LoginView.as_view(),name='register'),
     path('vlogout/',LogoutView.as_view(),name='register'),
+    path('vforgot /',ForgotAPIV.as_view(),name='vforgot'),
 
     ]+router.urls

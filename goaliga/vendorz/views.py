@@ -24,10 +24,16 @@ from django.core.mail import send_mail
 from django.contrib.auth import authenticate
 from accountz.authentication import *
 
-
-
-
 from vendorz import serializers
+
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import EmailMessage
+
+
 
 
 
@@ -74,12 +80,8 @@ class LoginView(APIView):
         
         email = request.data['email']
         password = request.data['password']
-        print(email,'emaillll')
-        print(password,'passwordddd')
         vendor = Registrationz.objects.filter(email=email).first()
-        print(vendor.email,'get emaillllll')
         passwords =vendor.password
-        print(passwords,"hoioioioi")
 
         if vendor is None:
             raise exceptions.AuthenticationFailed ('No Vendor available')
@@ -112,7 +114,36 @@ class LoginView(APIView):
 
 
 
+class ForgotAPIV(APIView):
+    def post(self,request):
+        data = request.data
+        
+        email = data['email']
+        
+        if Registrationz.objects.filter(email=email).exists():
+            vendor = Registrationz.objects.get(email__exact=email)
+            print(vendor)
 
+        #reset password mail
+
+            current_site = get_current_site(request)
+            mail_subject = 'Reset Your Password'
+            message = render_to_string('accounts/reset.html', {
+                'vendor': vendor,
+                'domain': current_site,
+                'uid': urlsafe_base64_encode(force_bytes(vendor.pk)),
+                'token': default_token_generator.make_token(vendor),
+            })
+            to_email = email
+            send_email = EmailMessage(mail_subject,message,to=[to_email])
+            send_email.send()
+
+            message={f'detail':'email sented to  {email}'}
+            return Response(message,status=status.HTTP_200_OK)
+
+        else:
+                message={'detail':'no account presented'}
+                return Response(message,status=status.HTTP_400_BAD_REQUEST) 
 
   
 
@@ -166,3 +197,4 @@ class ItineraryViewset(viewsets.ModelViewSet):
     authentication_classes = [StaffAuthentication]
     queryset = Itinerary.objects.all()
     serializer_class = ItinerarySerilaizer
+

@@ -306,3 +306,4 @@ def UserProfile(request):
     serializer=AccountSerilaizer(user,many=False)
     return Response(serializer.data)
 
+    

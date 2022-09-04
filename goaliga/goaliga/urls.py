@@ -24,7 +24,7 @@ urlpatterns = [
     path ('account/',include('accountz.urls')),
     path ('',include('trips.urls')),
     path ('vendorz/',include('vendorz.urls')),
-
+      path ('payment/',include('payment.urls')),
 
     # documentation
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

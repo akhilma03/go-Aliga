@@ -39,6 +39,7 @@ def decode_refresh_token (token):
       except : 
         raise exceptions.AuthenticationFailed('unauthenticated')
 # MIDDLEWARE
+
 class JWTAuthentication(BaseAuthentication):
         def authenticate(self, request):
 
