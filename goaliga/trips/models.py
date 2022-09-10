@@ -34,6 +34,7 @@ class Packages(models.Model):
     location         = models.CharField(max_length=100,null=True)
     date             = models.DateField(null=True)
     availablity      =  models.CharField(max_length=100,null=True)
+    stock           = models.IntegerField(null=True)
 
 
     

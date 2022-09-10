@@ -1,15 +1,30 @@
+from importlib.resources import Package
 import json
 import razorpay
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import Order
-from .serializers import OrderSerializer
+from .models import Order,PassengerDetails
+from .serializers import OrderSerializer,AddressSerializer
 from django.conf import settings
+from rest_framework import generics
 
 
 # you have to create .env file in same folder where you are using environ.Env()
 # reading .env file which located in api folder
+
+@api_view(['POST'])
+def DetailsPassenger(request):
+    data = request.data
+    details = PassengerDetails.objects.create(
+        user = request.user,
+        name = data['name'],
+        address=data['address'],
+        city = data['city'],
+        pincode=data['pincode'])
+    serializer = AddressSerializer(details,many=True)
+    return Response(serializer.data)
+
 
 
 @api_view(['POST'])
@@ -98,6 +113,10 @@ def handle_payment_success(request):
         return Response({'error': 'Something went wrong'})
 
     # if payment is successful that means check is None then we will turn isPaid=True
+    id=request.data['id']
+    package = Package.object.get(id=id)
+    package.stock-=1
+    package.save()
     order.isPaid = True
     order.save()
 

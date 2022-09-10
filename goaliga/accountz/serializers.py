@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import Account
 import re
 from vendorz.models import Registrationz
+from payment.models import Order
 
 def isNamevalid(first_name):
     if(re.match("^(?=.{1,40}$)[a-zA-Z]+(?:[-'\s][a-zA-Z]+)*$",first_name)==None):
@@ -36,4 +37,14 @@ class VendorSerilaizers(serializers.ModelSerializer):
         model = Registrationz
         # fields = ['company_name','company_logo','owner_name','adhar_no','aadhar_image','office_address','mobile','email','registration_doc','licence_no','licence_image','year_of_experience','password','confirm_password']
         fields = ['company_name','owner_name','is_staff','is_active','appProcess']
-      
+
+class OrderSerilaizer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['order_package','order_amount','order_payment_id','order_date','order_status']  
+        
+class AdminOrderSerilaizer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['order_package','order_amount','order_payment_id','order_date','order_status','']    
+        read_only_fields= ['order_package','order_amount','order_payment_id','order_date']    

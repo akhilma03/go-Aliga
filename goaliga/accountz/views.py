@@ -1,5 +1,6 @@
 
 from email import header
+from genericpath import exists
 from lib2to3.pgen2 import token
 from os import access
 from . authentication import create_access_token, create_refresh_token
@@ -11,7 +12,7 @@ from rest_framework.authentication import get_authorization_header
 from rest_framework.views import APIView
 from django.contrib.auth.hashers import make_password
 from accountz.models import Account,UserToken
-from .serializers import AccountSerilaizer, VendorSerilaizers, VerifySerilazer
+from .serializers import AccountSerilaizer, VendorSerilaizers, VerifySerilazer,OrderSerilaizer,AdminOrderSerilaizer
 from rest_framework.decorators import api_view, permission_classes
 from .authentication import *
 from rest_framework.permissions import IsAuthenticated
@@ -19,6 +20,8 @@ from django.contrib.auth import authenticate
 from vendorz.models import *
 from vendorz.serializers import *
 from rest_framework.decorators import authentication_classes
+from payment.models import Order
+import re 
 
 
 #email
@@ -33,20 +36,46 @@ from django.core.mail import EmailMessage
 # Create your views here.
 @api_view(['POST'])
 def Registerz(request):
-    data = request.data
     try:
-        password = data['password']
-        confirm_password = data['confirm_password']
-        if password == confirm_password:
-            userpassword = password
-        else:
-            print("The password is Missmatch")
+        data=request.data
+        first_name=data['first_name']
+        last_name=data['last_name']
+        email=data['email']
+        password=data['password']
+        confirm_password=data['confirm_password']
+        phone=data['phone']
 
+         # validatations for blank
+        if email=='' or first_name=='' or last_name ==''  or password=='' or confirm_password=='' or phone=='':
+            message={'error':' fill the blanks'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
+            #password missmatching
+        if password!=confirm_password:
+            message={'error':'password missmatch'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)    
+        else:
+            userpassword = password
+      
+
+        regex = '^[0-9]+$' 
+        def check_number(value):
+            if(re.search(regex, value)):
+                print("Digit")
+                return True
+            else:
+                print('number')
+                return False
+        if not check_number(phone):
+            message={'error':' mobile number must be a integer'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)   
+        if Account.objects.get(email=email).exists():
+            message={'error':' email already exists'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)           
         user = Account.objects.create(
-            first_name=data['first_name'],
-            last_name=data['last_name'],
-            email=data['email'],
-            phone=data['phone'],
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            phone=phone,
             password=make_password(userpassword)
         )
         phone = data['phone']
@@ -87,7 +116,7 @@ def Registerz(request):
 def verification(request):
     try:
         data = request.data
-        phone = request.session['phone']
+        phone = data['phone']
         code = data['code']
         if check(phone, code):
             user = Account.objects.get(phone=phone)
@@ -305,5 +334,28 @@ def UserProfile(request):
     user=request.user
     serializer=AccountSerilaizer(user,many=False)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def UserOrder(request):
+    user=request.user
+    order = Order.objects.get(user=user)
+    serializer = OrderSerilaizer(order,many=False)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def Orderdetails(request,id):
+    try:
+        order = Order.objects.get(id=id)
+        addmin = AdminOrderSerilaizer(instance=order,data=request.data)
+        if addmin.is_valid():
+            addmin.save()
+        else:
+            return Response(addmin.data)
+
+    except:
+        message={'detail':'Error'}
+        return Response(message,status=status.HTTP_400_BAD_REQUEST)        
+
 
     

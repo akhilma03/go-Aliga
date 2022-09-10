@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'vendorz',
      'drf_yasg',
      'corsheaders',
-     'payment'
+     'payment',
+     'django_filters'
 
     
 ]

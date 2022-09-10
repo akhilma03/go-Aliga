@@ -11,13 +11,49 @@ from .serializers import *
 from rest_framework.response import Response
 from rest_framework import status 
 import datetime
-
+from  payment.models import Order,PassengerDetails
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+from .pagination import PackagePagination
 # Create your views here.
 
 
 class ViewPackages(generics.ListAPIView):
-    queryset = Packages.objects.filter(is_approve=True)
+    queryset = Packages.objects.filter(is_available=True)
     serializer_class = PackageSerilaizer
+    pagination_class = PackagePagination
+
+
+
+#filter
+class FilterPackages(generics.ListAPIView):
+    queryset = Packages.objects.filter(is_available=True)
+    serializer_class = PackageSerilaizer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['package_name','slug']
+
+#search
+class SearchPackages(generics.ListAPIView):
+     queryset = Packages.objects.filter(is_available=True) 
+     serializer_class = PackageSerilaizer
+     filter_backends = [filters.SearchFilter]
+     search_fields = ['slug','package_name','price']
+#ordering
+class OrderPackages(generics.ListAPIView):
+     queryset = Packages.objects.filter(is_available=True) 
+     serializer_class = PackageSerilaizer
+     filter_backends = [filters.OrderingFilter]
+     ordering = ['price','Days']
+     
+    
+
+# class ViewPackages(generics.ListAPIView):
+#     queryset = Packages.objects.filter(is_approve=True)
+#     serializer_class = PackageSerilaizer
+
+    # def get_queryset(self):
+    #  package_name = self.request.query_params.get('package_name',None)
+    #  return Packages.objects.filter(package_name=package_name)
     
 
 @api_view(['GET'])
@@ -67,20 +103,38 @@ def Bookuser(request,pk):
     return Response(serializer.data)
 
 
+
+@api_view(['GET'])
+def addVariation(request,pk):
+    package = Packages.objects.get(id=pk)
+    variation = Variations.objects.filter(package=package)
+    serializer = SlotSerilaizer(variation,many=True)
+    return Response(serializer.data)
     
-@api_view(['POST'])
-def addPackage(request):
-    data = request.data
-    No_of_peoples = data['No_of_peoples']
-    No_Days =data['No_Days']
+# @api_view(['POST'])
+# def addOrder(request):
+#     user = request.user
+#     data = request.data
+#     orderItem = data['orderitem']
+#     if orderItem and len(orderItem) == 0:
+#         return Response({'detail':'No booked items'},status=status.HTTP_400_BAD_REQUEST)
 
-    print(No_Days,No_of_peoples)
-    try:
-        variation = Variations.objects.get(variation_category__iexact=No_of_peoples,variation_value__iexact =No_Days )
-        print(variation)
-    except:
-        pass  
+#     else:
+#         #book order
+#         order = Order.objects.create(
+#             user=user,
+#             order_amount='order_amount'
+#         )  
 
-    return Response("returned")
+
+#         #create passanger details
+
+#     passangerdetails = PassengerDetails.objects.create(
+#         order=order,
+#         address = data['PassengerDetails']['address'],
+#         city = data['PassengerDetails']['city'],
+#         pincode= data['PassengerDetails']['pincode']
+#     )      
+#     return Response("returned")
 
 
