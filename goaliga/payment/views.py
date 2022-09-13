@@ -46,7 +46,7 @@ def start_payment(request):
     # we are saving an order with isPaid=False because we've just initialized the order
     # we haven't received the money we will handle the payment succes in next 
     # function
-    order = Order.objects.create(order_product=name, 
+    order = Order.objects.create(order_package_package_name=name, 
                                  order_amount=amount, 
                                  order_payment_id=payment['id'])
 

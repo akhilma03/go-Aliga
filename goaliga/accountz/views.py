@@ -47,11 +47,11 @@ def Registerz(request):
 
          # validatations for blank
         if email=='' or first_name=='' or last_name ==''  or password=='' or confirm_password=='' or phone=='':
-            message={'error':' fill the blanks'}
+            message={'error':' fill the blanks','status':'false'}
             return Response(message,status=status.HTTP_400_BAD_REQUEST)
             #password missmatching
         if password!=confirm_password:
-            message={'error':'password missmatch'}
+            message={'error':'password missmatch','status':'false'}
             return Response(message,status=status.HTTP_400_BAD_REQUEST)    
         else:
             userpassword = password
@@ -66,10 +66,10 @@ def Registerz(request):
                 print('number')
                 return False
         if not check_number(phone):
-            message={'error':' mobile number must be a integer'}
+            message={'error':' mobile number must be a integer','status':'false'}
             return Response(message,status=status.HTTP_400_BAD_REQUEST)   
         if Account.objects.get(email=email).exists():
-            message={'error':' email already exists'}
+            message={'error':' email already exists','status':'false'}
             return Response(message,status=status.HTTP_400_BAD_REQUEST)           
         user = Account.objects.create(
             first_name=first_name,
@@ -82,9 +82,9 @@ def Registerz(request):
         request.session['phone'] = phone
         send(phone)
         serilaizer = AccountSerilaizer(user, many=False)
-        return Response(serilaizer.data)
+        return Response(serilaizer.data,status=status.HTTP_200_OK)
     except:
-        message = {'detail': 'User with this email already exist'}
+        message = {'detail': 'User with this email already exist','status':'false'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 # class VerifyOtp(APIView):
@@ -337,6 +337,7 @@ def UserProfile(request):
 
 
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
 def UserOrder(request):
     user=request.user
     order = Order.objects.get(user=user)
