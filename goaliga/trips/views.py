@@ -37,7 +37,7 @@ class SearchPackages(generics.ListAPIView):
      queryset = Packages.objects.filter(is_available=True) 
      serializer_class = PackageSerilaizer
      filter_backends = [filters.SearchFilter]
-     search_fields = ['slug','package_name','price']
+     search_fields = ['slug','package_name','price','category__category_name']
 #ordering
 class OrderPackages(generics.ListAPIView):
      queryset = Packages.objects.filter(is_available=True) 
@@ -102,6 +102,13 @@ def Bookuser(request,pk):
     serializer = SlotSerilaizer(slot,many=True)
     return Response(serializer.data)
 
+@api_view(['POST'])
+def AddBook(request):
+    serializer = SlotSerilaizer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)    
+
 
 
 @api_view(['GET'])
@@ -110,31 +117,6 @@ def addVariation(request,pk):
     variation = Variations.objects.filter(package=package)
     serializer = SlotSerilaizer(variation,many=True)
     return Response(serializer.data)
-    
-# @api_view(['POST'])
-# def addOrder(request):
-#     user = request.user
-#     data = request.data
-#     orderItem = data['orderitem']
-#     if orderItem and len(orderItem) == 0:
-#         return Response({'detail':'No booked items'},status=status.HTTP_400_BAD_REQUEST)
 
-#     else:
-#         #book order
-#         order = Order.objects.create(
-#             user=user,
-#             order_amount='order_amount'
-#         )  
-
-
-#         #create passanger details
-
-#     passangerdetails = PassengerDetails.objects.create(
-#         order=order,
-#         address = data['PassengerDetails']['address'],
-#         city = data['PassengerDetails']['city'],
-#         pincode= data['PassengerDetails']['pincode']
-#     )      
-#     return Response("returned")
 
 

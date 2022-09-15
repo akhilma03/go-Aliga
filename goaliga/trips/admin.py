@@ -8,7 +8,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class PackageAdmin(admin.ModelAdmin):
      prepopulated_fields = {'slug':('package_name',)}
-     list_display = ('package_name', 'slug')
+     list_display = ('package_name', 'slug','stock',)
 
 class VariationModel(admin.ModelAdmin):     
   list_display=('package','variation_category','variation_value')

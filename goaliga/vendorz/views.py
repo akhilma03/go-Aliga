@@ -121,26 +121,27 @@ class ForgotAPIV(APIView):
         data = request.data
         print(data)
         email = data['email']
-        if Registrationz.objects.filter(email=email).exists():
-            vendor = Registrationz.objects.filter(email=email).first()
-            print(vendor)
-        return Response ({'msg'})
+        # if Registrationz.objects.filter(email=email).exists():
+        vendor = Registrationz.objects.filter(email=email).first()
+        print(vendor)
+
         #reset password mail
 
-        #     current_site = get_current_site(request)
-        #     mail_subject = 'Reset Your Password'
-        #     message = render_to_string('vendorz/reset.html', {
-        #         'vendor': vendor,
-        #         'domain': current_site,
-        #         'uid': urlsafe_base64_encode(force_bytes(vendor.pk)),
-        #         'token': default_token_generator.make_token(vendor),
-        #     })
-        #     to_email = email
-        #     send_email = EmailMessage(mail_subject,message,to=[to_email])
-        #     send_email.send()
+        current_site = get_current_site(request)
+        print(current_site)
+        mail_subject = 'Reset Your Password'
+        message = render_to_string('vendorz/reset.html', {
+            'vendor': vendor,
+            'domain': current_site,
+            'uid': urlsafe_base64_encode(force_bytes(vendor.id)),
+            'token': default_token_generator.make_token(vendor),
+        })
+        to_email = email
+        send_email = EmailMessage(mail_subject,message,to=[to_email])
+        send_email.send()
 
-        #     message={f'detail':'email sented to  {email}'}
-        #     return Response(message,status=status.HTTP_200_OK)
+        message={f'detail':'email sented to  {email}'}
+        return Response(message,status=status.HTTP_200_OK)
 
         # else:
         #         message={'detail':'no account presented'}

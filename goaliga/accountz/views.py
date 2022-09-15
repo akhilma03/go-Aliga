@@ -12,7 +12,7 @@ from rest_framework.authentication import get_authorization_header
 from rest_framework.views import APIView
 from django.contrib.auth.hashers import make_password
 from accountz.models import Account,UserToken
-from .serializers import AccountSerilaizer, VendorSerilaizers, VerifySerilazer,OrderSerilaizer,AdminOrderSerilaizer
+from .serializers import AccountSerilaizer, VendorSerilaizers, VerifySerilazer,OrderSerilaizer,AdminOrderSerilaizer,OrderSerilaizerz
 from rest_framework.decorators import api_view, permission_classes
 from .authentication import *
 from rest_framework.permissions import IsAuthenticated
@@ -155,6 +155,7 @@ class LoginView(APIView):
     
             access_token = create_access_token(user.id)
             refresh_token = create_refresh_token(user.id)
+            
 
             UserToken.objects.create(
                 user_id = user.id,
@@ -340,8 +341,8 @@ def UserProfile(request):
 @authentication_classes([JWTAuthentication])
 def UserOrder(request):
     user=request.user
-    order = Order.objects.get(user=user)
-    serializer = OrderSerilaizer(order,many=False)
+    order = Order.objects.filter(user=user)
+    serializer = OrderSerilaizerz(order,many=True)
     return Response(serializer.data)
 
 @api_view(['POST'])
@@ -358,5 +359,12 @@ def Orderdetails(request,id):
         message={'detail':'Error'}
         return Response(message,status=status.HTTP_400_BAD_REQUEST)        
 
+@api_view(['GET'])
+@authentication_classes([AdminJwt])
+def Orders(request):
+    order = Order.objects.all()
+    serializer = OrderSerilaizerz(order,many=True)
+    return Response(serializer.data)
 
-    
+
+

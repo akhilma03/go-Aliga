@@ -42,6 +42,11 @@ class OrderSerilaizer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['order_package','order_amount','order_payment_id','order_date','order_status']  
+
+class OrderSerilaizerz(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = '__all__'          
         
 class AdminOrderSerilaizer(serializers.ModelSerializer):
     class Meta:

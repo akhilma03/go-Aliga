@@ -54,12 +54,14 @@ class Itinerary(models.Model):
 
 class DateBooking(models.Model):
     package=models.ForeignKey(Packages,on_delete=models.CASCADE,null=True,blank=True)   
-    Date=models.DateTimeField(auto_now_add=True)
+    Date=models.DateField(blank=True)
     days=models.CharField(max_length=30)
     active=models.BooleanField(default=False)
+    isbooked = models.BooleanField(default=False,blank=True)
+     
 
     def __str__(self):
-        return self.days
+        return self.package.package_name
 
 variation_choice =(('No_of_peoples','No_of_peoples'),('No_Days','No Days'))
 class Variations(models.Model):

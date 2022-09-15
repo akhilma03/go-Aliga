@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,10 +48,12 @@ INSTALLED_APPS = [
      'drf_yasg',
      'corsheaders',
      'payment',
-     'django_filters'
-
+     'django_filters',
+     'crispy_forms',
     
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,6 +86,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'goaliga.wsgi.application'
 AUTH_USER_MODEL = 'accountz.Account'
+
+STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+    ]
+#media config
+# MEDIA_URL = 'images/'  
+MEDIA_URL = '/images/' 
+MEDIA_ROOT = BASE_DIR/'images/'
 
 
 
