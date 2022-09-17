@@ -1,4 +1,5 @@
 
+from csv import excel
 from dataclasses import field
 from pyexpat import model
 from wsgiref.validate import validator
@@ -29,7 +30,8 @@ class VendorSerilaizer(serializers.ModelSerializer):
 class PackageSerilaizerz(serializers.ModelSerializer):
     class Meta:
         model = Packages
-        fields = ['package_name','slug','Overview','price','imagesMain','images1','images2','images3','Days','category','No_of_peoples','inclusion','exclusion','things_to_pack','is_available']
+        exclude = ('availablity','is_approve','date','modified_date','created_date' )
+        # ['package_name','slug','Overview','price','imagesMain','images1','images2','images3','Days','category','No_of_peoples','inclusion','exclusion','things_to_pack','is_available']
 
 class ItinerarySerilaizer(serializers.ModelSerializer):
     class Meta:

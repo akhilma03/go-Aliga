@@ -35,7 +35,7 @@ def start_payment(request):
     # request.data is coming from frontend
     amount = request.data['amount']
     name = request.data['name']
-    address = request.data['address']
+    address = request.data['address'] 
     slot = request.data['slot']
 
     # setup razorpay client this is the client to whome user is paying money that's you

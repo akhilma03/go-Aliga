@@ -136,12 +136,16 @@ def verification(request):
 class LoginView(APIView):
     """ login view required \
         email: , password : ,"""
-
+    
 
     def post(self, request):
         print(request.data)
         email = request.data['email']
         password = request.data['password']
+
+        if email=='' or password=='':
+            message={'error':' fill the blanks','status':'false'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
 
         user = Account.objects.filter(email=email).first()
 
@@ -149,7 +153,7 @@ class LoginView(APIView):
             raise exceptions.AuthenticationFailed('Invalid Credientials')
 
         if not user.check_password(password):
-            raise exceptions.AuthenticationFailed('Invalid Credientials')
+            raise exceptions.AuthenticationFailed('Password Missmatch')
         user = authenticate(email=email, password=password)  
         if user: 
     

@@ -32,7 +32,7 @@ class Packages(models.Model):
     is_approve       = models.BooleanField(default=False)
     is_available     = models.BooleanField(default=True)
     location         = models.CharField(max_length=100,null=True)
-    date             = models.DateField(null=True)
+    date             = models.DateField(auto_now_add=True, null=True)
     availablity      =  models.CharField(max_length=100,null=True)
     stock           = models.IntegerField(null=True)
 
