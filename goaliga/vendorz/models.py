@@ -31,3 +31,8 @@ class VendorToken(models.Model):
     token = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     expired_at = models.DateTimeField()
+
+class Adverstisement(models.Model):
+    image1 =  models.ImageField(upload_to = 'photos/add')
+    image2 =  models.ImageField(upload_to = 'photos/add')
+    image3 =  models.ImageField(upload_to = 'photos/add')

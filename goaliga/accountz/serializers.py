@@ -5,18 +5,18 @@ import re
 from vendorz.models import Registrationz
 from payment.models import Order
 
-def isNamevalid(first_name):
-    if(re.match("^(?=.{1,40}$)[a-zA-Z]+(?:[-'\s][a-zA-Z]+)*$",first_name)==None):
-        print(first_name)
-        raise serializers.ValidationError("Invalid Name ")
-    return first_name 
+# def isNamevalid(first_name):
+#     if(re.match("^(?=.{1,40}$)[a-zA-Z]+(?:[-'\s][a-zA-Z]+)*$",first_name)==None):
+#         print(first_name)
+#         raise serializers.ValidationError("Invalid Name ")
+#     return first_name 
 
 
 class AccountSerilaizer(serializers.ModelSerializer):
     class Meta:
         model=Account
         fields =['first_name','last_name','password','email','phone']
-        validators = [isNamevalid]
+        # validators = [isNamevalid]
 
     # def validate_first_name(self,first_name):
     #     if(re.match("^[a-zA-Z]*$",first_name)==None):
@@ -41,7 +41,7 @@ class VendorSerilaizers(serializers.ModelSerializer):
 class OrderSerilaizer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ['order_package','order_amount','order_payment_id','order_date','order_status']  
+        fields = ['order_status']  
 
 class OrderSerilaizerz(serializers.ModelSerializer):
     class Meta:
@@ -51,5 +51,5 @@ class OrderSerilaizerz(serializers.ModelSerializer):
 class AdminOrderSerilaizer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ['order_package','order_amount','order_payment_id','order_date','order_status','']    
-        read_only_fields= ['order_package','order_amount','order_payment_id','order_date']    
+        fields = ['order_status']    
+        # read_only_fields= ['order_package','order_amount','order_payment_id','order_date']    

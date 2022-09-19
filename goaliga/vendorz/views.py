@@ -184,7 +184,7 @@ class LogoutView(APIView):
 
     
 class PackageViewset(viewsets.ModelViewSet):
-    authentication_classes = [StaffAuthentication]
+    # authentication_classes = [StaffAuthentication]
     queryset = Packages.objects.all()   
     serializer_class = PackageSerilaizerz
    

@@ -1,0 +1,8 @@
+#!/media/akhil/50527C80527C6D1A/Project/GoAliga/env/bin/python3
+# -*- coding: utf-8 -*-
+import re
+import sys
+from twisted.scripts.twistd import run
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.exit(run())

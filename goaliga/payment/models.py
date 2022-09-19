@@ -19,6 +19,7 @@ class PassengerDetails(models.Model):
     
     
 class Order(models.Model):
+    choice = ( ('Approved','Approved'),('Cancelled','Cancelled'),('Cancel','Cancel'),('Pending','Pending'))
     user =models.ForeignKey(Account,on_delete=models.CASCADE,null =True)
     order_package = models.ForeignKey(Packages,on_delete=models.CASCADE,null=True)
     order_amount = models.CharField(max_length=25)
@@ -30,7 +31,7 @@ class Order(models.Model):
     address = models.ForeignKey(PassengerDetails,on_delete=models.CASCADE,null=True)
     updated_at = models.DateTimeField(auto_now=True)
     slot = models.ForeignKey(DateBooking,on_delete=models.CASCADE,null =True)
-    order_status = models.BooleanField(default=True)
+    order_status = models.CharField(max_length=50,choices=choice,default='Pending',blank=True)
     
     def __str__(self):
         return self.order_package.package_name

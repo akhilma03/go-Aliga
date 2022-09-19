@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+        #  'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,11 +51,13 @@ INSTALLED_APPS = [
      'payment',
      'django_filters',
      'crispy_forms',
+     'chat',
+
     
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
+# ASGI_APPLICATION = 'goaliga.asgi.application'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

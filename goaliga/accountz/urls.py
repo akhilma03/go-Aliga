@@ -23,8 +23,11 @@ urlpatterns = [
     path('userprofile/',views.UserProfile),
     path('blockvendor/<int:pk>/',views.BlockVendor),
     path('orders/',views.UserOrder,name='uorders'),
-    path('ordersdetails/',views.Orderdetails,name='ordersd'),
-    path('allorder/',views.Orders,name='orders')
+    path('ordersdetails/<int:id>/',views.Orderdetails,name='ordersd'),
+    path('allorder/',views.Orders,name='orders'),
+     path('cancel/<int:id>/',views.CancelOrder,name='corders'),
+
+
        
 
 ] 

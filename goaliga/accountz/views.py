@@ -22,6 +22,8 @@ from vendorz.serializers import *
 from rest_framework.decorators import authentication_classes
 from payment.models import Order
 import re 
+from django.core.mail import EmailMessage
+from django.core.mail import send_mail
 
 
 #email
@@ -55,33 +57,42 @@ def Registerz(request):
             return Response(message,status=status.HTTP_400_BAD_REQUEST)    
         else:
             userpassword = password
-      
 
-        regex = '^[0-9]+$' 
-        def check_number(value):
-            if(re.search(regex, value)):
-                print("Digit")
-                return True
-            else:
-                print('number')
-                return False
-        if not check_number(phone):
-            message={'error':' mobile number must be a integer','status':'false'}
-            return Response(message,status=status.HTTP_400_BAD_REQUEST)   
-        if Account.objects.get(email=email).exists():
-            message={'error':' email already exists','status':'false'}
-            return Response(message,status=status.HTTP_400_BAD_REQUEST)           
-        user = Account.objects.create(
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            phone=phone,
-            password=make_password(userpassword)
-        )
+
+        # regex = '^[0-9]+$' 
+        # def check_number(value):
+        #     if(re.search(regex, value)):
+        #         print("Digit")
+        #         return True
+        #     else:
+        #         print('number')
+        #         return False
+        # if not check_number(phone):
+        #     message={'error':' mobile number must be a integer','status':'false'}
+        #     return Response(message,status=status.HTTP_400_BAD_REQUEST)   
+        # if Account.objects.get(email=email).exists():
+        #     message={'error':' email already exists','status':'false'}
+        #     return Response(message,status=status.HTTP_400_BAD_REQUEST) 
+        print(email)    
+        users=Account()
+        users.first_name=first_name
+        users.last_name=last_name
+        users.email=email
+        users.password=make_password(userpassword)
+        users.phone=phone
+        users.save()      
+        # user = Account.objects.create(
+        #     first_name=first_name,
+        #     last_name=last_name,
+        #     email=email,
+        #     phone=phone,
+        #     password=make_password(userpassword)
+        # )
+        print(users)
         phone = data['phone']
         request.session['phone'] = phone
         send(phone)
-        serilaizer = AccountSerilaizer(user, many=False)
+        serilaizer = AccountSerilaizer(users, many=False)
         return Response(serilaizer.data,status=status.HTTP_200_OK)
     except:
         message = {'detail': 'User with this email already exist','status':'false'}
@@ -350,18 +361,57 @@ def UserOrder(request):
     return Response(serializer.data)
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+def CancelOrder(request,id):
+    user = request.user
+    order = Order.objects.get(id=id) 
+    print(order)
+    cancel = OrderSerilaizer(instance=order,data=request.data)
+    print(cancel)
+    if cancel.is_valid():
+         cancel.save()
+    
+         send_mail('goAliga Payment ',
+            'Your request is underprocess will verify and refunded  ',
+            'aligadrm@gmail.com'
+            ,[user.email]   
+            ,fail_silently=False)
+    else:
+        message={'detail':'Error'}
+        return Response(message,status=status.HTTP_400_BAD_REQUEST)   
+
+    return Response(cancel.data)       
+
+@api_view(['POST'])
 def Orderdetails(request,id):
-    try:
+    # try:
         order = Order.objects.get(id=id)
+        print(order.user)
+        print(order.order_package.stock,"commm")
         addmin = AdminOrderSerilaizer(instance=order,data=request.data)
         if addmin.is_valid():
             addmin.save()
+            order = Order.objects.get(id=id)
+            order.order_package.stock +=1  
+            order.order_package.save()
+            print(order.order_package.stock,"out")
+            order.save()
+            print(order.order_package.stock,"out")
+            
+            
+              
+            
         else:
-            return Response(addmin.data)
+             message={'detail':'Error'}
+             return Response(message,status=status.HTTP_400_BAD_REQUEST) 
 
-    except:
-        message={'detail':'Error'}
-        return Response(message,status=status.HTTP_400_BAD_REQUEST)        
+        return Response(addmin.data)    
+
+    # except:
+    #     message={'detail':'Error'}
+    #     return Response(message,status=status.HTTP_400_BAD_REQUEST) 
+
+                
 
 @api_view(['GET'])
 @authentication_classes([AdminJwt])

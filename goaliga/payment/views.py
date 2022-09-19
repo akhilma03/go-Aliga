@@ -125,6 +125,7 @@ def handle_payment_success(request):
     Booking = DateBooking.objects.get(id=Booking)
     Booking.isbooked=True
     order.isPaid = True
+    order.order_status='Approved'
     order.save()
 
     res_data = {
@@ -184,6 +185,7 @@ def paymentstatus(request):
         order.order_payment_id  = response['razorpay_payment_id']
             
         order.isPaid = True
+        order.order_status='Approved'
         order.save()
 
         name = request.session['key']
@@ -229,3 +231,6 @@ def paymentstatus(request):
     #     "payment": payment,
     #     "order": serializer.data
     # }    
+
+
+    

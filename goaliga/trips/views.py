@@ -23,8 +23,6 @@ class ViewPackages(generics.ListAPIView):
     serializer_class = PackageSerilaizer
     pagination_class = PackagePagination
 
-
-
 #filter
 class FilterPackages(generics.ListAPIView):
     queryset = Packages.objects.filter(is_available=True)

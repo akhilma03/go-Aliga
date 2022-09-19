@@ -5,6 +5,7 @@ from .views import *
 from django.urls import path
 urlpatterns = [
  path('packages/',ViewPackages.as_view(),name='packages'),
+#  path('packages/<int:pk>',ViewPackages.as_view(),name='packages'),
   # path('packages/',views.ViewPackages.as_view(),name='packages'),
   path('trips/<slug:category_slug>/',views.trips,name='packages'),
   path('trips/<slug:category_slug>/<slug:package_slug>/',views.tripdetails,name='packages'),
