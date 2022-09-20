@@ -6,4 +6,6 @@ from django.urls import path
 
 urlpatterns = [
     
-    path('chat/',views.index),]
+    path('',views.index),
+    path('<str:room_name>/',views.room),
+    ]

@@ -26,6 +26,8 @@ urlpatterns = [
     path('ordersdetails/<int:id>/',views.Orderdetails,name='ordersd'),
     path('allorder/',views.Orders,name='orders'),
      path('cancel/<int:id>/',views.CancelOrder,name='corders'),
+      path('changepassword/',views.Changepassword,name='pchange'),
+      
 
 
        

@@ -1,0 +1,48 @@
+{% extends 'chat/basic.html' %}
+
+{% block content %}
+<h1>dfd</h1>
+<div class ='container'>
+    <div class="row">
+        <form>
+        <textarea  id="chat_text" cols="" rows="30"></textarea><br>
+        <input id="input" type="text"><br>
+        <input  id="submit" type="button" value="Send">
+
+    </form>
+    </div>
+
+</div>
+
+
+<div id = "user-hello"></div>
+
+    {{ room_name|json_script:"room-name" }}
+<script>
+    document.querySelector('#submit').onclick =function(e){
+        const messageInputDom = document.querySelector('#input');
+        const message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message':message
+
+        })) ;  
+        messageInputDom.value = ''; 
+    };
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    const chatSocket = new WebSocket(
+        'ws://' + 
+        window.location.host +
+        '/ws/chat/'+
+        roomName + 
+        '/'
+    );
+
+    chatSocket.onmessage = function (e){
+        const data = JSON.parse(e.data);
+        console.log(data)
+        document.querySelector('#user-hello').innerHTML = (data.tester)
+        document.querySelector('#chat-text').value += (data.message +'\n')
+    }
+</script>
+
+{% endblock %}

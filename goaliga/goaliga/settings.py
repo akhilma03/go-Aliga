@@ -35,7 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-        #  'channels',
+         'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,7 +57,7 @@ INSTALLED_APPS = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-# ASGI_APPLICATION = 'goaliga.asgi.application'
+ASGI_APPLICATION = 'goaliga.asgi.application'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -107,11 +107,11 @@ MEDIA_ROOT = BASE_DIR/'images/'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'goaliga',
-        'USER': 'postgres',
-        'PASSWORD': 'cartbia',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': config('DB_NAME'), 
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'), 
+        'PORT': config('DB_PORT'),
     } 
 }
 
@@ -162,10 +162,10 @@ TWILIO_AUTH_TOKEN=config('TWILIO_AUTH_TOKEN')
 
 
 #SMTP
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'aligadrm@gmail.com'
-EMAIL_HOST_PASSWORD = 'jhpzxatzbzhbyfzr'
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT =config('EMAIL_PORT')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 
 CORS_ORIGIN_ALLOW_ALL =True
@@ -175,3 +175,8 @@ CORS_ALLOW_CREDENTIALS = True
 
 RAZORPAY_PUBLIC_KEY =config('RAZORPAY_PUBLIC_KEY')
 RAZORPAY__SECRET_KEY = config('RAZORPAY__SECRET_KEY')
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}

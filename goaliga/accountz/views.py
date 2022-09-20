@@ -57,6 +57,7 @@ def Registerz(request):
             return Response(message,status=status.HTTP_400_BAD_REQUEST)    
         else:
             userpassword = password
+            
 
 
         # regex = '^[0-9]+$' 
@@ -70,9 +71,10 @@ def Registerz(request):
         # if not check_number(phone):
         #     message={'error':' mobile number must be a integer','status':'false'}
         #     return Response(message,status=status.HTTP_400_BAD_REQUEST)   
-        # if Account.objects.get(email=email).exists():
-        #     message={'error':' email already exists','status':'false'}
-        #     return Response(message,status=status.HTTP_400_BAD_REQUEST) 
+        if Account.objects.get(email=email).exists():
+            print("jjej")
+            message={'error':' email already exists','status':'false'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST) 
         print(email)    
         users=Account()
         users.first_name=first_name
@@ -91,7 +93,7 @@ def Registerz(request):
         print(users)
         phone = data['phone']
         request.session['phone'] = phone
-        send(phone)
+        # send(phone)
         serilaizer = AccountSerilaizer(users, many=False)
         return Response(serilaizer.data,status=status.HTTP_200_OK)
     except:
@@ -420,5 +422,7 @@ def Orders(request):
     serializer = OrderSerilaizerz(order,many=True)
     return Response(serializer.data)
 
+def Changepassword(request):
+    pass
 
 
