@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'trips',
     'vendorz',
-     'drf_yasg',
+    #  'drf_yasg',
      'corsheaders',
      'payment',
      'django_filters',
