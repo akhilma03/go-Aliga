@@ -20,6 +20,8 @@ urlpatterns = [
   path('packfilter/',FilterPackages.as_view(),name='packages'),
   path('addbook/',views.AddBook,name='book'),
 
+  
+
 #   path('trips/<slug:category_slug>/<slug:package_slug>/review/',Reviews.as_view(),name='review')
 
 ]+router.urls

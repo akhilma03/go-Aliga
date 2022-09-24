@@ -213,7 +213,13 @@ def AddPack(request):
     return Response(serializer.data)
 
 
-    
+@api_view(['GET'])
+@authentication_classes([StaffAuthentication])   
+def VendorPack(request):
+    vendor= request.user
+    pack = Packages.objects.filter(vendor=vendor)
+    serilaizer = PackageSerilaizerz(pack,many= True)
+    return Response(serilaizer.data)
 
 
     
@@ -224,7 +230,7 @@ class PackageViewset(viewsets.ModelViewSet):
    
 
 class CategoryViewset(viewsets.ModelViewSet):
-    authentication_classes = [StaffAuthentication]
+    authentication_classes = [AdminJwt]
     queryset = Category.objects.all()
     serializer_class = CategorySerilaizer
 

@@ -21,14 +21,17 @@ urlpatterns = [
     path('viewregs/<int:pk>/',ViewdetailRegs.as_view(),name='viewreg'),
     #  path('viwreg/<int:pk>/',views.verification),
     path('userprofile/',views.UserProfile),
+    path('vendorstatus/',views.StatusApplication),
     path('blockvendor/<int:pk>/',views.BlockVendor),
     path('orders/',views.UserOrder,name='uorders'),
     path('ordersdetails/<int:id>/',views.Orderdetails,name='ordersd'),
     path('allorder/',views.Orders,name='orders'),
     path('cancel/<int:id>/',views.CancelOrder,name='corders'),
     path('changepassword/',views.Changepassword,name='pchange'),
+    path('viewvendor/',ViewVendor.as_view(),name='viewvendor'), 
     path('revenew/',views.Revenew,name='viewvendor'), 
-    path('revenew/',views.Revenew,name='viewvendor'), 
+    path('blockve',views.BlockVendor,name='blockvendor')
+    
 
        
 

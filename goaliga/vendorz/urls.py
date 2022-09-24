@@ -16,6 +16,7 @@ urlpatterns = [
     path('vlogout/',LogoutView.as_view(),name='register'),
     path('vforgot/',ForgotAPIV.as_view(),name='vforgot'),
     path('revenew/',views.Vendorrevenew),
-    path('addpack/',views.AddPack)
+    path('addpack/',views.AddPack),
+    path('vendorpack/',views.VendorPack)
 
     ]+router.urls

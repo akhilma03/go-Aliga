@@ -453,3 +453,7 @@ def Revenew(request):
     
  
     return Response(form_data)
+
+class ViewVendor(generics.ListAPIView):
+    queryset = Registrationz.objects.filter(is_staff=True)
+    serializer_class = VendorsSerilazer
