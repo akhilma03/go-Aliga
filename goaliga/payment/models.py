@@ -32,6 +32,7 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     slot = models.ForeignKey(DateBooking,on_delete=models.CASCADE,null =True)
     order_status = models.CharField(max_length=50,choices=choice,default='Pending',blank=True)
+    order_total = models.IntegerField(null=True)
     
     def __str__(self):
         return self.order_package.package_name

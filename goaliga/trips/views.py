@@ -15,6 +15,8 @@ from  payment.models import Order,PassengerDetails
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from .pagination import PackagePagination
+from rest_framework import viewsets
+from accountz.authentication import JWTAuthentication
 # Create your views here.
 
 
@@ -42,6 +44,7 @@ class OrderPackages(generics.ListAPIView):
      serializer_class = PackageSerilaizer
      filter_backends = [filters.OrderingFilter]
      ordering = ['price','Days']
+
      
     
 
@@ -95,6 +98,7 @@ def viewCat(request):
 @api_view(['GET'])
 def Bookuser(request,pk):
     now = datetime.datetime.now()
+    print(now)
     package = Packages.objects.get(id=pk)
     slot = DateBooking.objects.filter(package=package,Date__gte=now)
     serializer = SlotSerilaizer(slot,many=True)
@@ -117,4 +121,18 @@ def addVariation(request,pk):
     return Response(serializer.data)
 
 
+authentication_classes = [JWTAuthentication]
+class Reviews(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class =ReviewSerializer
+
+
+# class Reviews(generics.ListCreateAPIView):
+#     # queryset = Review.objects.all()
+#     serializer_class =ReviewSerializer
+
+#     def get_queryset(self):
+#         pk = self.kwargs['pk']
+#         return Review.objects.filter(package=pk)
+       
 

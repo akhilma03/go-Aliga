@@ -1,7 +1,7 @@
 from dataclasses import fields
 from pyexpat import model
 from rest_framework import serializers
-from .models import Packages,Category,Itinerary,DateBooking,Variations
+from .models import Packages,Category,Itinerary,DateBooking,Variations,Review
 
 
 class ItinerarySerializer(serializers.ModelSerializer):
@@ -9,9 +9,17 @@ class ItinerarySerializer(serializers.ModelSerializer):
         model = Itinerary
         fields = '__all__'    
 
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields ='__all__' 
+
+
+
 
 class PackageSerilaizer(serializers.ModelSerializer):
     # itinerary= ItinerarySerializer(many=True,read_only=True)
+    reviews= ReviewSerializer(many=True,read_only=True)
     class Meta:
         model = Packages
         fields = '__all__'

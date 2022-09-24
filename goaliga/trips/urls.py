@@ -1,6 +1,9 @@
 from . import views
 from .views import *
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
 
+router.register('review',Reviews,basename='review')
 
 from django.urls import path
 urlpatterns = [
@@ -16,4 +19,7 @@ urlpatterns = [
   path('packor/',OrderPackages.as_view(),name='packages'),
   path('packfilter/',FilterPackages.as_view(),name='packages'),
   path('addbook/',views.AddBook,name='book'),
-]
+
+#   path('trips/<slug:category_slug>/<slug:package_slug>/review/',Reviews.as_view(),name='review')
+
+]+router.urls
