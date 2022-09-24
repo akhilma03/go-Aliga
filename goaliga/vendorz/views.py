@@ -17,6 +17,7 @@ from trips.models import Packages,Itinerary,Category
 from rest_framework import viewsets
 from .authentication import *
 from django.contrib.auth.hashers import check_password
+from rest_framework.decorators import authentication_classes
 
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -24,6 +25,8 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate
 from accountz.authentication import *
+from payment.models import Order
+
 
 from vendorz import serializers
 
@@ -180,11 +183,42 @@ class LogoutView(APIView):
         }    
         return response
 
+@api_view(['POST'])
+@authentication_classes([StaffAuthentication])
+def AddPack(request):
+    data= request.data
+    vendors = request.user
+    cat=Category.objects.get(id=data['category'])
+    print(data['category'])
+    vendor = Packages.objects.create(
+    package_name= data['package_name'],
+    slug=data['slug'],
+    Overview=data['Overview'],
+    price=data['price'],
+    imagesMain=data['imagesMain'],
+    images1=data['images1'],
+    images2=data['images2'],
+    images3=data['images3'],
+    Days=data['Days'],
+    category=cat,
+    No_of_peoples=data['No_of_peoples'],
+    inclusion=data['inclusion'],
+    exclusion=['exclusion'],
+    things_to_pack=data['things_to_pack'],
+    is_available=data['is_available'],
+    stock=data['stock'],
+    vendor=vendors,
+   )
+    serializer = PackageSerilaizerz(vendor,many = False)
+    return Response(serializer.data)
+
+
+    
 
 
     
 class PackageViewset(viewsets.ModelViewSet):
-    # authentication_classes = [StaffAuthentication]
+    authentication_classes = [StaffAuthentication]
     queryset = Packages.objects.all()   
     serializer_class = PackageSerilaizerz
    
@@ -200,4 +234,19 @@ class ItineraryViewset(viewsets.ModelViewSet):
     queryset = Itinerary.objects.all()
     serializer_class = ItinerarySerilaizer
 
+@api_view(['GET'])
+def Vendorrevenew(request):
+    total_revenue =0
+    order_without=Order.objects.exclude(order_status="Cancelled")
+    print(order_without)
+    for order in order_without:
+        total_revenue +=int(order.order_amount)
+    vendor_amount=total_revenue-(total_revenue*(10/100))
+    print(vendor_amount,"iu")
+    
+    return Response(vendor_amount)
 
+# def VendorPack(request,id):
+#     vendor = request.vendor
+#     pakage = Packages.objects.get()
+    
