@@ -124,7 +124,7 @@ def Registerz(request):
 
 #         message = {'detail':'User with this email already exist'}
 #         return Response(message)
-
+print("helloo")
 
 @api_view(['POST'])
 def verification(request):
