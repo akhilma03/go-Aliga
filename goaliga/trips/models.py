@@ -76,12 +76,11 @@ class Variations(models.Model):
 
 
     def __str__(self):
-<<<<<<< HEAD
+
         return self.variation_category  
-||||||| df29751c
-        return self.variation_category  
-=======
-        return self.variation_category  
+
+
+ 
 
 
 class Review(models.Model):
@@ -95,4 +94,4 @@ class Review(models.Model):
     def __str__(self) :
         return str(self.rating)+" - "+self.package.package_name
 
->>>>>>> b1995cf9f5cc4bbf0945fc43097591d6785e7d1f
+
