@@ -17,6 +17,7 @@ from rest_framework import filters
 from .pagination import PackagePagination
 from rest_framework import viewsets
 from accountz.authentication import JWTAuthentication
+from rest_framework.pagination import PageNumberPagination
 # Create your views here.
 
 

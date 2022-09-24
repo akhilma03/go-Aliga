@@ -12,7 +12,7 @@ from rest_framework.authentication import get_authorization_header
 from rest_framework.views import APIView
 from django.contrib.auth.hashers import make_password
 from accountz.models import Account,UserToken
-from .serializers import AccountSerilaizer, VendorSerilaizers, VerifySerilazer,OrderSerilaizer,AdminOrderSerilaizer,OrderSerilaizerz
+from .serializers import AccountSerilaizer, VendorSerilaizers, VerifySerilazer,OrderSerilaizer,AdminOrderSerilaizer,OrderSerilaizerz,VendorsSerilazer
 from rest_framework.decorators import api_view, permission_classes
 from .authentication import *
 from rest_framework.permissions import IsAuthenticated
@@ -24,6 +24,7 @@ from payment.models import Order
 import re 
 from django.core.mail import EmailMessage
 from django.core.mail import send_mail
+
 
 
 #email
@@ -426,3 +427,29 @@ def Changepassword(request):
     pass
 
 
+
+@api_view(['GET'])
+def Revenew(request):
+    vendor= Registrationz.objects.filter(is_staff=True)
+    Vendorcount = vendor.count()
+    user = Account.objects.filter(is_active=True)
+    Usercount = user.count()
+    total_revenue =0
+    order_without=Order.objects.exclude(order_status="Cancelled")
+    print(order_without)
+    for order in order_without:
+        total_revenue +=int(order.order_amount)
+    vendor_amount=total_revenue-(total_revenue*(25/100))
+    admin_amount=  total_revenue- vendor_amount  
+
+    print(total_revenue,"iu")
+    form_data={
+        'Vendorcount':Vendorcount,
+        'Usercount':Usercount,
+        'Total_revenue':total_revenue,
+        'Vendor_amount':vendor_amount,
+        'Admin_amount':admin_amount
+    }
+    
+ 
+    return Response(form_data)
