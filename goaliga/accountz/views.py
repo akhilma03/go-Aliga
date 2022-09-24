@@ -61,18 +61,18 @@ def Registerz(request):
             
 
 
-        # regex = '^[0-9]+$' 
-        # def check_number(value):
-        #     if(re.search(regex, value)):
-        #         print("Digit")
-        #         return True
-        #     else:
-        #         print('number')
-        #         return False
-        # if not check_number(phone):
-        #     message={'error':' mobile number must be a integer','status':'false'}
-        #     return Response(message,status=status.HTTP_400_BAD_REQUEST)   
-        if Account.objects.get(email=email).exists():
+        regex = '^[0-9]+$' 
+        def check_number(value):
+            if(re.search(regex, value)):
+                print("Digit")
+                return True
+            else:
+                print('number')
+                return False
+        if not check_number(phone):
+            message={'error':' mobile number must be a integer','status':'false'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)   
+        if Account.objects.filter(email=email).exists():
             print("jjej")
             message={'error':' email already exists','status':'false'}
             return Response(message,status=status.HTTP_400_BAD_REQUEST) 
@@ -94,7 +94,7 @@ def Registerz(request):
         print(users)
         phone = data['phone']
         request.session['phone'] = phone
-        # send(phone)
+        send(phone)
         serilaizer = AccountSerilaizer(users, many=False)
         return Response(serilaizer.data,status=status.HTTP_200_OK)
     except:
