@@ -124,9 +124,9 @@ class ForgotAPIV(APIView):
         data = request.data
         print(data)
         email = data['email']
-        # if Registrationz.objects.filter(email=email).exists():
-        vendor = Registrationz.objects.filter(email=email).first()
-        print(vendor)
+        if Registrationz.objects.filter(email=email).exists():
+            vendor = Registrationz.objects.get(email__exact=email)
+            print(vendor)
 
         #reset password mail
 

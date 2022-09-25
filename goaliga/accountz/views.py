@@ -229,35 +229,37 @@ class LogoutAPIView(APIView):
         }
         return response
 
-class ForgotAPI(APIView):
-    def post(self,request):
-        data = request.data
+@api_view(['POST'])
+def forgotpassword(request):
+
+    data = request.data
+    print(data)
+    email = data['email']
         
-        email = data['email']
-        
-        if Account .objects.filter(email=email).exists():
-            user = Account.objects.get(email__exact=email)
+    if Account.objects.filter(email=email).exists():
+        user = Account.objects.get(email__exact=email)
+        print(user)
 
         #reset password mail
 
-            current_site = get_current_site(request)
-            mail_subject = 'Reset Your Password'
-            message = render_to_string('accounts/reset.html', {
-                'user': user,
-                'domain': current_site,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': default_token_generator.make_token(user),
-            })
-            to_email = email
-            send_email = EmailMessage(mail_subject,message,to=[to_email])
-            send_email.send()
+        current_site = get_current_site(request)
+        mail_subject = 'Reset Your Password'
+        message = render_to_string('accounts/reset.html', {
+            'user': user,
+            'domain': current_site,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': default_token_generator.make_token(user),
+        })
+        to_email = email
+        send_email = EmailMessage(mail_subject,message,to=[to_email])
+        send_email.send()
 
-            message={f'detail':'email sented to  {email}'}
-            return Response(message,status=status.HTTP_200_OK)
+        message={f'detail':'email sented to  {email}'}
+        return Response(message,status=status.HTTP_200_OK)
 
-        else:
-                message={'detail':'no account presented'}
-                return Response(message,status=status.HTTP_400_BAD_REQUEST) 
+    else:
+            message={'detail':'no account presented'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST) 
 
 @api_view(['POST'])
 def resetpassword_validate(request, uidb64, token): 
@@ -295,6 +297,12 @@ def resetpassword(request):
     else:
             message={'message':'password not match'}
             return Response(message,status=status.HTTP_400_BAD_REQUEST)    
+
+
+class ViewallUsers(generics.ListAPIView):
+    # authentication_classes = [AdminJwt]
+    queryset = Account.objects.all()
+    serializer_class = AccountSerilaizer
 
 
 class ViewallUser(generics.RetrieveUpdateAPIView):
