@@ -53,9 +53,13 @@ def Registerz(request):
             message={'error':' fill the blanks','status':'false'}
             return Response(message,status=status.HTTP_400_BAD_REQUEST)
             #password missmatching
-        if password!=confirm_password:
+        elif password!=confirm_password:
             message={'error':'password missmatch','status':'false'}
             return Response(message,status=status.HTTP_400_BAD_REQUEST)    
+        
+        elif len(password)<6:
+            message={'error':'password contain min 6 charector'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
         else:
             userpassword = password
             
