@@ -39,6 +39,9 @@ from django.core.mail import EmailMessage
 # Create your views here.
 @api_view(['POST'])
 def Registerz(request):
+    
+    """ Registerz view required \
+        (first_name: , last_name :, email :,password :,confirm_password :,phone : ),"""
     try:
         data=request.data
         first_name=data['first_name']
@@ -132,6 +135,8 @@ print("helloo")
 
 @api_view(['POST'])
 def verification(request):
+    """ verification view required \
+       ( phone: , code :) """
     try:
         data = request.data
         phone = data['phone']
@@ -153,7 +158,7 @@ def verification(request):
 
 class LoginView(APIView):
     """ login view required \
-        email: , password : ,"""
+        (email: , password : ),"""
     
 
     def post(self, request):
@@ -208,6 +213,8 @@ class UserApiView(APIView):
 
 @api_view(['POST'])
 def Refresh(request):
+    """ verification view required \
+        (refresh:)"""
     print('wooe')
     data=request.data
     refresh=data['refresh']
@@ -245,6 +252,8 @@ class LogoutAPIView(APIView):
 
 @api_view(['POST'])
 def forgotpassword(request):
+    """ forgotpassword view required \
+        ( email :)"""
 
     data = request.data
     print(data)
@@ -294,6 +303,8 @@ def resetpassword_validate(request, uidb64, token):
 
 @api_view(['POST'])
 def resetpassword(request):
+    """ resetpassword view required \
+        (create_password: , confirm_password) """
     data = request.data
     print(data)
     create_password = data['create_password']     
@@ -314,13 +325,13 @@ def resetpassword(request):
 
 
 class ViewallUsers(generics.ListAPIView):
-    # authentication_classes = [AdminJwt]
+    authentication_classes = [AdminJwt]
     queryset = Account.objects.all()
     serializer_class = AccountSerilaizer
 
 
 class ViewallUser(generics.RetrieveUpdateAPIView):
-    # authentication_classes = [AdminJwt]
+    authentication_classes = [AdminJwt]
     queryset = Account.objects.all()
     serializer_class = AccountSerilaizer
 
@@ -339,6 +350,7 @@ def StatusApplication(request,pk):
 
 
 class statusApplication(generics.RetrieveUpdateAPIView):
+    authentication_classes = [AdminJwt]
     queryset = Registrationz.objects.all()
     serializer_class = VendorSerilaizers
 
@@ -354,7 +366,8 @@ class ViewdetailRegs(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = VendorSerilaizers        
     
 
-@api_view(['PUT'])  
+@api_view(['PUT']) 
+@authentication_classes([AdminJwt]) 
 def BlockVendor(request,id):
     try:
         user=Registrationz.objects.get(id=id)
@@ -408,8 +421,10 @@ def CancelOrder(request,id):
     return Response(cancel.data)       
 
 @api_view(['POST'])
+@authentication_classes([AdminJwt]) 
 def Orderdetails(request,id):
-    # try:
+    
+    try:
         order = Order.objects.get(id=id)
         print(order.user)
         print(order.order_package.stock,"commm")
@@ -432,10 +447,10 @@ def Orderdetails(request,id):
 
         return Response(addmin.data)    
 
-    # except:
-    #     message={'detail':'Error'}
-    #     return Response(message,status=status.HTTP_400_BAD_REQUEST) 
-
+    except:
+         message={'detail':'Error'}
+         return Response(message,status=status.HTTP_400_BAD_REQUEST) 
+ 
                 
 
 @api_view(['GET'])
@@ -451,6 +466,7 @@ def Changepassword(request):
 
 
 @api_view(['GET'])
+@authentication_classes([AdminJwt])
 def Revenew(request):
     vendor= Registrationz.objects.filter(is_staff=True)
     Vendorcount = vendor.count()
@@ -477,9 +493,11 @@ def Revenew(request):
     return Response(form_data)
 
 class ViewVendor(generics.ListAPIView):
+    authentication_classes = [AdminJwt]
     queryset = Registrationz.objects.filter(is_staff=True)
     serializer_class = VendorsSerilazer
     
 class BlockUser(generics.RetrieveUpdateDestroyAPIView):
+         authentication_classes = [AdminJwt]
          queryset = Account.objects.filter(is_active=True)
          serializer_class = VerifySerilazer

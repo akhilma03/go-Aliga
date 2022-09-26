@@ -49,6 +49,9 @@ from django.db.models.functions import Extract
 # Create your views here.
 @api_view(['POST'])
 def RegisterVendor(request):
+    """ verification view required \
+        (company_name: , company_logo :, adhar_no :,owner_name :,aadhar_image :,office_address :,
+        mobile: , email :, adhar_no :,registration_doc :,licence_no :,licence_image :,year_of_experience :,year_of_experience :,''password),"""
     data = request.data    
     if data['email']=='' or data['company_name']=='' or data['owner_name']=='' or data['office_address']=='' or data['password']=='':
          message={'error':' fill the blanks'}

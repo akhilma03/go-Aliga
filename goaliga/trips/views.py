@@ -18,6 +18,9 @@ from .pagination import PackagePagination
 from rest_framework import viewsets
 from accountz.authentication import JWTAuthentication
 from rest_framework.pagination import PageNumberPagination
+
+from rest_framework.decorators import authentication_classes
+from accountz . authentication import *
 # Create your views here.
 
 
@@ -106,6 +109,7 @@ def Bookuser(request,pk):
     return Response(serializer.data)
 
 @api_view(['POST'])
+@authentication_classes([AdminJwt])
 def AddBook(request):
     serializer = SlotSerilaizer(data=request.data)
     if serializer.is_valid():
@@ -122,8 +126,9 @@ def addVariation(request,pk):
     return Response(serializer.data)
 
 
-authentication_classes = [JWTAuthentication]
+
 class Reviews(viewsets.ModelViewSet):
+    authentication_classes = [JWTAuthentication]
     queryset = Review.objects.all()
     serializer_class =ReviewSerializer
 
