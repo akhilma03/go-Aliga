@@ -202,20 +202,30 @@ class UserApiView(APIView):
     def get(self, request):
             return Response(AccountSerilaizer(request.user).data)
 
-
-class RefreshAPIView(APIView):
-    def post(self,request):
-        refresh_token = request.COOKIES.get('refresh_token')
-        id = decode_refresh_token(refresh_token)
-
-        if not UserToken.objects.filter(user_id = id,
-        token = refresh_token,expired_at__gt=datetime.da390000tetime.now(tz=datetime.timezone.utc)).exists():
-             raise exceptions.AuthenticationFailed('unautherozied') 
-       
-        access_token = create_access_token(id)
-        return Response ( {
-            'token': access_token
-        })  
+@api_view(['POST'])
+def Refresh(request):
+    print('wooe')
+    data=request.data
+    refresh=data['refresh']
+    # refresh_token=request.COOKIES.get('refresh_token')
+    id=decode_refresh_token(refresh)
+    if not UserToken.objects.filter(
+        user_id=id,
+        token=refresh,
+        expired_at__gt=datetime.datetime.now(tz=datetime.timezone.utc)
+    ).exists():
+        response=Response()
+        response.data={
+            'message':'error'
+        }
+        return response
+        raise exceptions.AuthenticationFailed('unauthenticate')
+    
+    access_token=create_access_token(id)
+    return Response({
+        'token':access_token,
+    })
+    
 
 
 class LogoutAPIView(APIView):
@@ -465,3 +475,7 @@ def Revenew(request):
 class ViewVendor(generics.ListAPIView):
     queryset = Registrationz.objects.filter(is_staff=True)
     serializer_class = VendorsSerilazer
+    
+class BlockUser(generics.RetrieveUpdateDestroyAPIView):
+         queryset = Account.objects.filter(is_active=True)
+         serializer_class = VerifySerilazer

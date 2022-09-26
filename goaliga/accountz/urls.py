@@ -10,7 +10,7 @@ urlpatterns = [
     path('verify/',views.verification),
     path('login/',LoginView.as_view()),
     # path('user/',UserApiView.as_view()),
-    path('refresh/',RefreshAPIView.as_view()),
+    path('refresh/',views.Refresh,name="refresh"),
     path('logout/',LogoutAPIView.as_view()),
     path('forgot/',views.forgotpassword),
     path('resetpassword_validate/<uidb64>/<token>',views.resetpassword_validate,name="resetpassword_validate"),
@@ -31,7 +31,8 @@ urlpatterns = [
     path('changepassword/',views.Changepassword,name='pchange'),
     path('viewvendor/',ViewVendor.as_view(),name='viewvendor'), 
     path('revenew/',views.Revenew,name='viewvendor'), 
-    path('blockve',views.BlockVendor,name='blockvendor')
+    path('blockve',views.BlockVendor,name='blockvendor'),
+    path('blockuser',BlockUser.as_view(),name='blockuser')
     
 
        

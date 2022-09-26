@@ -120,37 +120,77 @@ class LoginView(APIView):
 
 
 class ForgotAPIV(APIView):
+  
     def post(self,request):
         data = request.data
         print(data)
         email = data['email']
+            
         if Registrationz.objects.filter(email=email).exists():
-            vendor = Registrationz.objects.get(email__exact=email)
-            print(vendor)
+            user = Registrationz.objects.get(email__exact=email)
+            print(user)
 
-        #reset password mail
+            #reset password mail
 
-        current_site = get_current_site(request)
-        print(current_site)
-        mail_subject = 'Reset Your Password'
-        message = render_to_string('vendorz/reset.html', {
-            'vendor': vendor,
-            'domain': current_site,
-            'uid': urlsafe_base64_encode(force_bytes(vendor.id)),
-            'token': default_token_generator.make_token(vendor),
-        })
-        to_email = email
-        send_email = EmailMessage(mail_subject,message,to=[to_email])
-        send_email.send()
+            current_site = get_current_site(request)
+            mail_subject = 'Reset Your Password'
+            message = render_to_string('accounts/reset.html', {
+                'user': user,
+                'domain': current_site,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': default_token_generator.make_token(user),
+            })
+            to_email = email
+            send_email = EmailMessage(mail_subject,message,to=[to_email])
+            send_email.send()
 
-        message={f'detail':'email sented to  {email}'}
-        return Response(message,status=status.HTTP_200_OK)
+            message={f'detail':'email sented to  {email}'}
+            return Response(message,status=status.HTTP_200_OK)
+
+        else:
+                message={'detail':'no account presented'}
+                return Response(message,status=status.HTTP_400_BAD_REQUEST) 
 
         # else:
         #         message={'detail':'no account presented'}
         #         return Response(message,status=status.HTTP_400_BAD_REQUEST) 
+@api_view(['POST'])
+def resetpassword_validate(request, uidb64, token): 
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = Account._default_manager.get(pk=uid)
+        except(TypeError, ValueError, OverflowError, Account.DoesNotExist):
+            user = None
 
-  
+        if user is not None and default_token_generator.check_token(user, token):
+            request.session['uid'] = uid
+            message={'detail':'uid taken'}
+            return Response(message,status=status.HTTP_200_OK)
+        else:
+            message={'detail':'no account presented'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def resetpassword(request):
+    data = request.data
+    print(data)
+    create_password = data['create_password']     
+    confirm_password = data['confirm_password'] 
+    print(create_password)        
+
+    if create_password == confirm_password:
+
+        uid = request.session.get('uid')
+        user = Account.objects.get(pk=uid)
+        user.set_password(create_password)
+        user.save()
+        message={'message':'password reset successfully'}
+        return Response(message,status=status.HTTP_200_OK)
+    else:
+            message={'message':'password not match'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)    
+
 
 
 

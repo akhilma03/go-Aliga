@@ -17,6 +17,8 @@ urlpatterns = [
     path('vforgot/',ForgotAPIV.as_view(),name='vforgot'),
     path('revenew/',views.Vendorrevenew),
     path('addpack/',views.AddPack),
-    path('vendorpack/',views.VendorPack)
+    path('vendorpack/',views.VendorPack),
+    path('resetpassword_validate/<uidb64>/<token>',views.resetpassword_validate,name="resetpassword_validate"),
+    path('resetpassword/',views.resetpassword),
 
     ]+router.urls
