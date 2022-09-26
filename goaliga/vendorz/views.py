@@ -26,6 +26,8 @@ from django.core.mail import send_mail
 from django.contrib.auth import authenticate
 from accountz.authentication import *
 from payment.models import Order
+from django.db.models.functions import ExtractMonth
+import calendar
 
 
 from vendorz import serializers
@@ -36,6 +38,9 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
+from django.db.models import Count
+import datetime
+from django.db.models.functions import Extract
 
 
 
@@ -283,14 +288,34 @@ class ItineraryViewset(viewsets.ModelViewSet):
 @api_view(['GET'])
 def Vendorrevenew(request):
     total_revenue =0
+    now = datetime.datetime.today()
+    a =now.month
+    print(a)
     order_without=Order.objects.exclude(order_status="Cancelled")
+    orders = Order.objects.annotate(month=ExtractMonth('createdAt')).values('month').annotate(count=Count('id')).values('month','count')
+    monthNumber = []
+    totalOrders = []
+    for d in orders:
+        monthNumber.append(calendar.month_name[d['month']])
+        totalOrders.append(d['count'])
+        
     print(order_without)
     for order in order_without:
         total_revenue +=int(order.order_amount)
     vendor_amount=total_revenue-(total_revenue*(10/100))
     print(vendor_amount,"iu")
+    form_data={
+        'monthNumber':monthNumber,
+        'totalOrders':totalOrders,
+        'vendor_amount':vendor_amount,
+      
+    }
     
-    return Response(vendor_amount)
+    
+    return Response(form_data)
+
+
+
 
 # def VendorPack(request,id):
 #     vendor = request.vendor
