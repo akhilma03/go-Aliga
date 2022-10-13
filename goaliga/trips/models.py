@@ -97,7 +97,7 @@ class Review(models.Model):
         return str(self.rating)+" - "+self.package.package_name
 
 
-class Favourites(models.Model):
-    package = models.ForeignKey(Packages,on_delete=models.CASCADE,null=True,blank=True)   
-    user    = models.ForeignKey(Account,on_delete=models.CASCADE,null=True,blank=True)   
-    isfav =  models.BooleanField(default=True)
+# class Favourites(models.Model):
+#     package = models.ForeignKey(Packages,on_delete=models.CASCADE,null=True,blank=True)   
+#     user    = models.ForeignKey(Account,on_delete=models.CASCADE,null=True,blank=True)   
+#     isfav =  models.BooleanField(default=True)

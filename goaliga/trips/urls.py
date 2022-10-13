@@ -5,7 +5,7 @@ router = DefaultRouter()
 
 router.register('review',Reviews,basename='review')
 
-router.register('fav',Favourite,basename='favourite')
+# router.register('fav',Favourite,basename='favourite')
 
 
 from django.urls import path
