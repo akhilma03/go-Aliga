@@ -3,6 +3,7 @@ from django.db import models
 
 from django.core.validators import MinValueValidator,MaxValueValidator
 from vendorz.models import Registrationz
+from accountz . models import  Account
 
 # Create your models here.
 class Category(models.Model):
@@ -17,7 +18,7 @@ class Category(models.Model):
 class Packages(models.Model):
     package_name     = models.CharField(max_length=100,unique=True)
     slug             = models.SlugField(max_length=100,unique=True)
-    Overview         = models.TextField(max_length=1000,blank = True)
+    Overview         = models.TextField(max_length=3000,blank = True)
     price            = models.IntegerField()
     imagesMain       = models.ImageField(upload_to = 'photos/product')
     images1          = models.ImageField(upload_to = 'photos/product')
@@ -29,9 +30,9 @@ class Packages(models.Model):
     created_date     = models.DateTimeField(auto_now_add=True)
     modified_date    = models.DateTimeField(auto_now=True)
     No_of_peoples    = models.CharField(max_length=100)
-    inclusion        = models.TextField(max_length=500)   
-    exclusion        = models.TextField(max_length=500) 
-    things_to_pack   = models.TextField(max_length=500) 
+    inclusion        = models.TextField(max_length=2000)   
+    exclusion        = models.TextField(max_length=1000) 
+    things_to_pack   = models.TextField(max_length=2000) 
     is_approve       = models.BooleanField(default=False)
     is_available     = models.BooleanField(default=True)
     location         = models.CharField(max_length=100,null=True)
@@ -59,6 +60,7 @@ class DateBooking(models.Model):
     package=models.ForeignKey(Packages,on_delete=models.CASCADE,null=True,blank=True)   
     Date=models.DateField(blank=True)
     days=models.CharField(max_length=30)
+    count = models.IntegerField(null=True)
     active=models.BooleanField(default=False)
     isbooked = models.BooleanField(default=False,blank=True)
      
@@ -95,3 +97,7 @@ class Review(models.Model):
         return str(self.rating)+" - "+self.package.package_name
 
 
+class Favourites(models.Model):
+    package = models.ForeignKey(Packages,on_delete=models.CASCADE,null=True,blank=True)   
+    user    = models.ForeignKey(Account,on_delete=models.CASCADE,null=True,blank=True)   
+    isfav =  models.BooleanField(default=True)

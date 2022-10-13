@@ -32,7 +32,8 @@ urlpatterns = [
     path('viewvendor/',ViewVendor.as_view(),name='viewvendor'), 
     path('revenew/',views.Revenew,name='viewvendor'), 
     path('blockve',views.BlockVendor,name='blockvendor'),
-    path('blockuser',BlockUser.as_view(),name='blockuser')
+    path('blockuser',BlockUser.as_view(),name='blockuser'),
+    path('change_password/',views.change_password,name='change password'),
     
 
        

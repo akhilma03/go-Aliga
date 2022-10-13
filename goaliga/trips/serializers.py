@@ -1,7 +1,7 @@
 from dataclasses import fields
 from pyexpat import model
 from rest_framework import serializers
-from .models import Packages,Category,Itinerary,DateBooking,Variations,Review
+from .models import Packages,Category,Itinerary,DateBooking,Variations,Review,Favourites
 
 
 class ItinerarySerializer(serializers.ModelSerializer):
@@ -43,3 +43,7 @@ class VariatiomSerilaizer(serializers.ModelSerializer):
         model = Variations
         fields = '__all__'
 
+class FavouriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Favourites
+        fields = '__all__'

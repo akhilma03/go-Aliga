@@ -122,8 +122,10 @@ def handle_payment_success(request):
     package = Package.object.get(id=id)
     package.stock-=1
     package.save()
-    Booking = DateBooking.objects.get(id=Booking)
+    Booking = DateBooking.objects.get(id=slot)
     Booking.isbooked=True
+    Booking.count-=1
+    Booking.save()
     order.isPaid = True
     order.order_status='Approved'
     order.save()
@@ -150,10 +152,10 @@ def temp_payment(request):
                                    "currency": "INR", 
                                    "payment_capture": "1"})
       
-        user = request.user
+        # user = request.user
         order = Order.objects.create(order_package_id=name, 
                                  order_amount=amount, 
-                                 user=user,
+                                #  user=user,
                                  order_id=payment['id'])
         payment['name']=name      
         print(order)                                          

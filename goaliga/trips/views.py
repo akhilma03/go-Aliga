@@ -133,6 +133,12 @@ class Reviews(viewsets.ModelViewSet):
     serializer_class =ReviewSerializer
 
 
+
+class Favourite(viewsets.ModelViewSet):
+    authentication_classes = [JWTAuthentication]
+    queryset = Favourites.objects.filter(isfav=True)
+    serializer_class =FavouriteSerializer
+
 # class Reviews(generics.ListCreateAPIView):
 #     # queryset = Review.objects.all()
 #     serializer_class =ReviewSerializer

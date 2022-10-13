@@ -5,6 +5,9 @@ router = DefaultRouter()
 
 router.register('review',Reviews,basename='review')
 
+router.register('fav',Favourite,basename='favourite')
+
+
 from django.urls import path
 urlpatterns = [
  path('packages/',ViewPackages.as_view(),name='packages'),
@@ -19,6 +22,7 @@ urlpatterns = [
   path('packor/',OrderPackages.as_view(),name='packages'),
   path('packfilter/',FilterPackages.as_view(),name='packages'),
   path('addbook/',views.AddBook,name='book'),
+#   path('review/',Reviews.as_view(),name='review'),
 
   
 

@@ -501,3 +501,28 @@ class BlockUser(generics.RetrieveUpdateDestroyAPIView):
          authentication_classes = [AdminJwt]
          queryset = Account.objects.filter(is_active=True)
          serializer_class = VerifySerilazer
+
+
+@api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+def change_password(request):
+    data=request.data
+    current_password=data['currentPassword']
+    new_password=data['newPassword']
+    confirm_password=data['confirmPassword']
+    
+    user=Account.objects.get(email=request.user)
+    if new_password==confirm_password:            
+        success=user.check_password(current_password)
+        if success:
+            user.set_password(new_password)
+            user.save()
+            message={'success':'password reset successfully'}
+            return Response(message,status=status.HTTP_200_OK)
+        else:
+            message={'error':' current password   is not currect'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
+           
+    else:
+        message={'error':'password missmatch'}
+        return Response(message,status=status.HTTP_400_BAD_REQUEST)         

@@ -311,7 +311,6 @@ def Vendorrevenew(request):
         'monthNumber':monthNumber,
         'totalOrders':totalOrders,
         'vendor_amount':vendor_amount,
-      
     }
     
     
