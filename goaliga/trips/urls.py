@@ -23,7 +23,7 @@ urlpatterns = [
   path('addbook/',views.AddBook,name='book'),
   path('fav/<int:pk>/',Favourite.as_view(),name='favourites'),
   path('favourites/<int:id>/',views.Favouritez,name='favourites'),
-
+  path('userfavourites/',views.Userfav,name='favourites'),
   
 
 #   path('trips/<slug:category_slug>/<slug:package_slug>/review/',Reviews.as_view(),name='review')

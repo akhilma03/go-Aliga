@@ -139,6 +139,9 @@ class Favourite(generics.RetrieveUpdateDestroyAPIView):
     queryset = Favourites.objects.filter(isfav=True)
     serializer_class =FavouriteSerializer
     
+    def get_queryset(self):
+        return Favourites.objects.filter(user=self.request.user)
+    
 @api_view(['POST'])    
 @authentication_classes([JWTAuthentication])
 def Favouritez(request,id):
@@ -153,7 +156,15 @@ def Favouritez(request,id):
     serializer = FavouriteSerializer(fav,many=False)
     return Response(serializer.data)
     
-        
+@api_view(['GET'])   
+@authentication_classes([JWTAuthentication])     
+def Userfav(request):
+    user=request.user
+    favo = Favourites.objects.filter(user=user)
+    serializer = FavouriteSerializer(favo,many=True)
+    return Response(serializer.data)
+    
+            
 
 # class Reviews(generics.ListCreateAPIView):
 #     # queryset = Review.objects.all()

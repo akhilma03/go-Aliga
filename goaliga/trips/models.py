@@ -101,3 +101,7 @@ class Favourites(models.Model):
     package = models.ForeignKey(Packages,on_delete=models.CASCADE,null=True,blank=True)   
     user    = models.ForeignKey(Account,on_delete=models.CASCADE,null=True,blank=True)   
     isfav =  models.BooleanField(default=True)
+    
+    
+    def __str__(self) :
+        return self.package.package_name
