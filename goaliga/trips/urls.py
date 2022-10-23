@@ -5,7 +5,6 @@ router = DefaultRouter()
 
 router.register('review',Reviews,basename='review')
 
-router.register('fav',Favourite,basename='favourite')
 
 
 from django.urls import path
@@ -22,7 +21,8 @@ urlpatterns = [
   path('packor/',OrderPackages.as_view(),name='packages'),
   path('packfilter/',FilterPackages.as_view(),name='packages'),
   path('addbook/',views.AddBook,name='book'),
-#   path('review/',Reviews.as_view(),name='review'),
+  path('fav/<int:pk>/',Favourite.as_view(),name='favourites'),
+  path('favourites/<int:id>/',views.Favouritez,name='favourites'),
 
   
 

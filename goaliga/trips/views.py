@@ -134,10 +134,26 @@ class Reviews(viewsets.ModelViewSet):
 
 
 
-class Favourite(viewsets.ModelViewSet):
-    authentication_classes = [JWTAuthentication]
+class Favourite(generics.RetrieveUpdateDestroyAPIView):
+    # authentication_classes = [JWTAuthentication]
     queryset = Favourites.objects.filter(isfav=True)
     serializer_class =FavouriteSerializer
+    
+@api_view(['POST'])    
+@authentication_classes([JWTAuthentication])
+def Favouritez(request,id):
+    user= request.user
+    packages= Packages.objects.get(id=id)
+    print(packages)
+    fav = Favourites.objects.create(
+        user =user,
+        package_id=packages.id ,
+        isfav = True  
+    )
+    serializer = FavouriteSerializer(fav,many=False)
+    return Response(serializer.data)
+    
+        
 
 # class Reviews(generics.ListCreateAPIView):
 #     # queryset = Review.objects.all()
