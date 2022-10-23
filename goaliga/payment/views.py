@@ -11,21 +11,26 @@ from rest_framework import generics
 from django.shortcuts import render
 from .forms import OrderForm
 from trips.models import DateBooking
-
+from rest_framework.decorators import authentication_classes
+from accountz.authentication import *
 
 # you have to create .env file in same folder where you are using environ.Env()
 # reading .env file which located in api folder
 
 @api_view(['POST'])
+@authentication_classes([JWTAuthentication])
 def DetailsPassenger(request):
     data = request.data
+    user =request.user
+    print(user,"dssds")
     details = PassengerDetails.objects.create(
-        user = request.user,
+        user_id = user.id,
         name = data['name'],
         address=data['address'],
         city = data['city'],
+        age=data['age'],
         pincode=data['pincode'])
-    serializer = AddressSerializer(details,many=True)
+    serializer = AddressSerializer(details,many=False)
     return Response(serializer.data)
 
 
