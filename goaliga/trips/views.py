@@ -135,7 +135,7 @@ class Reviews(viewsets.ModelViewSet):
 
 
 class Favourite(generics.RetrieveUpdateDestroyAPIView):
-    # authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication]
     queryset = Favourites.objects.filter(isfav=True)
     serializer_class =FavouriteSerializer
     
