@@ -56,8 +56,8 @@ def start_payment(request):
     order = Order.objects.create(order_package_id=name, 
                                  order_amount=amount, 
                                  order_payment_id=payment['id'],
-                                 slot=slot,
-                                 address=address)
+                                 slot_id=slot,
+                                 address_id=address)
 
     serializer = OrderSerializer(order)
 
