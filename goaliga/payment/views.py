@@ -14,6 +14,8 @@ from trips.models import DateBooking
 from rest_framework.decorators import authentication_classes
 from accountz.authentication import *
 
+
+
 # you have to create .env file in same folder where you are using environ.Env()
 # reading .env file which located in api folder
 
@@ -239,5 +241,30 @@ def paymentstatus(request):
     #     "order": serializer.data
     # }    
 
-
+@api_view(['POST'])
+def Rcount(request):
+     data = request.data
+     package_id= data['order_package']
+     print(type(package_id),"lll")
+     order=Order.objects.create(
+     user_id=data['user'],
+     order_id=data['order_id'],
+     order_package_id=data['order_package'],
+     order_amount= data['order_amount'],
+     order_payment_id=data['order_payment_id'],
+     address_id=data['address_id'],
+     slot_id=data['slot_id'],
+     isPaid=True,
+     order_status='Approved',
+     order_total=0
+     )
     
+     package= Packages.objects.get(id=package_id)
+     package.stock -=1
+     package.save()
+     serializer = OrderSerializer(order,many=False)
+     return Response(serializer.data,status=status.HTTP_200_OK)
+     
+     
+     
+        
